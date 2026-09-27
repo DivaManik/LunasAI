@@ -71,3 +71,17 @@ export const cardSecretHashes = new Map<string, string>(); // SHA-256 hash of se
 export function hashSecret(secret: string): string {
   return createHash("sha256").update(secret).digest("hex");
 }
+
+// Faucet rate limit: wallet address -> last claim timestamp
+export const faucetClaims = new Map<string, number>();
+
+export function canClaim(address: string): boolean {
+  const last = faucetClaims.get(address.toLowerCase());
+  if (!last) return true;
+  const cooldownMs = 24 * 60 * 60 * 1000; // 24 jam
+  return Date.now() - last > cooldownMs;
+}
+
+export function recordClaim(address: string): void {
+  faucetClaims.set(address.toLowerCase(), Date.now());
+}

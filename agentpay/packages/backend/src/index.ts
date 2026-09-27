@@ -7,6 +7,7 @@ import history from "./routes/history";
 import auth from "./routes/auth";
 import mcp from "./routes/mcp";
 import oauth from "./routes/oauth";
+import faucet from "./routes/faucet";
 
 const app = new Hono();
 app.use("*", cors());
@@ -19,6 +20,7 @@ app.route("/api/history", history);
 app.route("/api/auth", auth);
 app.route("/mcp", mcp);
 app.route("/", oauth);
+app.route("/", faucet);
 
 const PORT = 3001;
 

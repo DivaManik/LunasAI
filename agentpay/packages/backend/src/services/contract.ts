@@ -128,3 +128,33 @@ export async function callRejectSpend(spendId: bigint): Promise<`0x${string}`> {
   await publicClient.waitForTransactionReceipt({ hash: txHash });
   return txHash;
 }
+
+const IDRX_ABI = [
+  {
+    name: "mint",
+    type: "function",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+] as const;
+
+export async function mintIDRX(to: `0x${string}`, amount: bigint): Promise<`0x${string}`> {
+  const idrxAddress = process.env.IDRX_TOKEN_ADDRESS as `0x${string}`;
+  if (!idrxAddress) throw new Error("IDRX_TOKEN_ADDRESS is not set in .env");
+
+  const { request } = await publicClient.simulateContract({
+    address: idrxAddress,
+    abi: IDRX_ABI,
+    functionName: "mint",
+    args: [to, amount],
+    account,
+  });
+
+  const txHash = await walletClient.writeContract(request);
+  await publicClient.waitForTransactionReceipt({ hash: txHash });
+  return txHash;
+}
