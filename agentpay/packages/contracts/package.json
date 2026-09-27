@@ -1,0 +1,10 @@
+{
+  "name": "@agentpay/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "compile": "forge build",
+    "test": "forge test",
+    "deploy:testnet": "bash -c 'set -a; source ../../.env; set +a; forge script script/Deploy.s.sol --rpc-url \"$BNB_RPC_URL\" --broadcast --private-key \"$PRIVATE_KEY\" --legacy'"
+  }
+}

@@ -1,0 +1,45 @@
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.env
+agentpay/.env
+
+# Node
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+**/dist/
+**/.next/
+
+# Foundry
+agentpay/packages/contracts/out/
+agentpay/packages/contracts/cache/
+agentpay/packages/contracts/broadcast/
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# TypeScript
+*.tsbuildinfo
