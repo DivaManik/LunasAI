@@ -7,7 +7,7 @@ import { delegationCardAbi } from "@/lib/abi";
 import { bnbTestnet } from "@/lib/chain";
 import { DELEGATION_CARD_ADDRESS, timestampToDate } from "@/lib/constants";
 import { SpendHistory } from "./SpendHistory";
-import { McpUrlManager } from "./McpUrlManager";
+import { SkeletonRow } from "./Skeleton";
 
 function idrxAmount(raw: bigint): string {
   return (Number(raw) / 100).toLocaleString("id-ID");
@@ -36,11 +36,13 @@ function getStatus(isActive: boolean, expiryTimestamp: bigint): CardStatus {
   return "active";
 }
 
-const STATUS_LABEL: Record<CardStatus, string> = {
-  active: "🟢 Aktif",
-  expired: "🔴 Expired",
-  revoked: "⚫ Revoked",
+const STATUS_CHIP: Record<CardStatus, { label: string; className: string }> = {
+  active: { label: "Aktif", className: "chip-active" },
+  expired: { label: "Expired", className: "chip-expired" },
+  revoked: { label: "Revoked", className: "chip-revoked" },
 };
+
+const emptyStateClass = "panel px-6 py-5 text-center text-sm text-muted";
 
 function useActiveWallet() {
   const { wallets } = useWallets();
@@ -71,16 +73,15 @@ function CardItem({ cardId }: { cardId: bigint }) {
   }, [cardId]);
 
   if (!card) {
-    return (
-      <div className="rounded border border-gray-200 bg-white p-6 shadow-sm text-gray-400">
-        Memuat Card #{cardId.toString()}...
-      </div>
-    );
+    return <SkeletonRow />;
   }
 
-  const [, , totalBudget, spentAmount, , expiryTimestamp, isActive] = card;
+  const [, authorizedAgent, totalBudget, spentAmount, autoApproveLimit, expiryTimestamp, isActive] =
+    card;
   const status = getStatus(isActive, expiryTimestamp);
   const remaining = totalBudget - spentAmount;
+  const usedPct =
+    totalBudget > BigInt(0) ? Math.min(100, (Number(spentAmount) / Number(totalBudget)) * 100) : 0;
 
   async function handleRevoke() {
     if (!wallet) return;
@@ -107,54 +108,66 @@ function CardItem({ cardId }: { cardId: bigint }) {
     }
   }
 
+  const chip = STATUS_CHIP[status];
+
   return (
-    <div className="flex flex-col gap-3 rounded border border-gray-200 bg-white p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <h3 className="font-bold">Card #{cardId.toString()}</h3>
-        <span className="text-sm">{STATUS_LABEL[status]}</span>
+    <div className="panel agent-card flex flex-col gap-4 px-5 py-5 sm:px-6">
+      <div className="flex items-center gap-4">
+        <div className="agent-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.08)] text-lg">
+          💳
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="mb-[3px] text-sm font-semibold">Kartu #{cardId.toString()}</div>
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+            <span className={`chip ${chip.className}`}>
+              <span className="chip-dot" />
+              {chip.label}
+            </span>
+            <span className="num">Auto ≤ {idrxAmount(autoApproveLimit)} IDRX</span>
+          </div>
+          <div className="mono mt-1 truncate text-[11px] text-dim" title={authorizedAgent}>
+            Agent {authorizedAgent.slice(0, 6)}...{authorizedAgent.slice(-4)}
+          </div>
+        </div>
+
+        <div className="shrink-0 text-right">
+          <div className="num font-display text-[15px] font-semibold text-gold">
+            {idrxAmount(totalBudget)}
+          </div>
+          <div className="num mt-0.5 text-xs text-muted">
+            {idrxAmount(spentAmount)} terpakai
+          </div>
+          <div className="mt-2 ml-auto h-[3px] w-20 overflow-hidden rounded-full bg-line">
+            <div
+              className="h-full rounded-full bg-[linear-gradient(90deg,var(--amber),var(--gold))]"
+              style={{ width: `${usedPct}%` }}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 text-sm text-gray-700">
-        <div>
-          <div className="text-gray-400">Budget</div>
-          <div className="font-medium">{idrxAmount(totalBudget)} IDRX</div>
-        </div>
-        <div>
-          <div className="text-gray-400">Terpakai</div>
-          <div className="font-medium">{idrxAmount(spentAmount)} IDRX</div>
-        </div>
-        <div>
-          <div className="text-gray-400">Sisa</div>
-          <div className="font-medium">{idrxAmount(remaining)} IDRX</div>
-        </div>
-      </div>
-
-      <div className="text-sm text-gray-700">
-        <span className="text-gray-400">Berlaku:</span>{" "}
-        {timestampToDate(expiryTimestamp)}
-      </div>
-
-      <div className="flex gap-2 pt-2">
-        <button
-          onClick={() => setShowHistory((v) => !v)}
-          className="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-300"
-        >
-          {showHistory ? "Sembunyikan History" : "Lihat History"}
-        </button>
-        {status === "active" && (
-          <button
-            onClick={handleRevoke}
-            disabled={isRevoking || !wallet}
-            className="rounded bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
-          >
-            {isRevoking ? "Memproses..." : "Revoke Card"}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
+        <span className="num text-xs text-muted">
+          Sisa {idrxAmount(remaining)} IDRX · s/d {timestampToDate(expiryTimestamp)}
+        </span>
+        <div className="flex gap-2">
+          <button onClick={() => setShowHistory((v) => !v)} className="btn-small">
+            {showHistory ? "Tutup History" : "Lihat History"}
           </button>
-        )}
+          {status === "active" && (
+            <button
+              onClick={handleRevoke}
+              disabled={isRevoking || !wallet}
+              className="btn-small btn-small-danger"
+            >
+              {isRevoking ? "Memproses..." : "Revoke"}
+            </button>
+          )}
+        </div>
       </div>
 
       {showHistory && <SpendHistory cardId={cardId} />}
-
-      <McpUrlManager cardId={cardId.toString()} />
     </div>
   );
 }
@@ -196,35 +209,32 @@ export function CardList() {
   }, [authenticated, address]);
 
   if (!authenticated) {
-    return (
-      <div className="rounded border border-gray-200 bg-white p-6 text-center text-gray-500 shadow-sm">
-        Login dulu untuk lihat kartu kamu
-      </div>
-    );
+    return <div className={emptyStateClass}>Login dulu untuk lihat kartu kamu</div>;
   }
 
   if (!address) {
-    return (
-      <div className="rounded border border-gray-200 bg-white p-6 text-center text-gray-500 shadow-sm">
-        Wallet belum terdeteksi. Coba login ulang.
-      </div>
-    );
+    return <div className={emptyStateClass}>Wallet belum terdeteksi. Coba login ulang.</div>;
   }
 
   if (isLoading) {
-    return <p className="text-gray-500">Memuat kartu...</p>;
+    return (
+      <div className="flex flex-col gap-3">
+        <SkeletonRow />
+        <SkeletonRow />
+      </div>
+    );
   }
 
   if (!cardIds || cardIds.length === 0) {
     return (
-      <div className="rounded border border-gray-200 bg-white p-6 text-center text-gray-500 shadow-sm">
-        Belum ada card. Buat card baru di halaman utama.
+      <div className={emptyStateClass}>
+        Belum ada kartu. Klik &quot;+ Buat Kartu&quot; di atas untuk membuat kartu pertama.
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       {cardIds.map((id) => (
         <CardItem key={id.toString()} cardId={id} />
       ))}

@@ -16,7 +16,13 @@ export const AUTHORIZED_AGENT = (process.env
 export const IDRX_TOKEN_ADDRESS = process.env
   .NEXT_PUBLIC_IDRX_TOKEN_ADDRESS as `0x${string}` | undefined;
 
+export const SHOP_URL = process.env.NEXT_PUBLIC_SHOP_URL || "http://localhost:3002";
+
 export const BSC_TESTNET_CHAIN_ID = 97;
+
+export function formatIdrx(raw: bigint | string | number): string {
+  return (Number(raw) / 100).toLocaleString("id-ID");
+}
 
 export const BSCSCAN_TESTNET_URL = "https://testnet.bscscan.com";
 

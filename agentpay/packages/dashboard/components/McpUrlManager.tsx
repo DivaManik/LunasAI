@@ -79,49 +79,48 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
 
   if (!url) {
     return (
-      <div className="flex flex-col gap-2 rounded border border-gray-200 bg-gray-50 p-4">
+      <div className="flex flex-col gap-2.5">
         <button
           onClick={handleGenerate}
           disabled={isGenerating}
-          className="self-start rounded bg-yellow-400 px-3 py-1.5 text-sm font-bold text-black hover:bg-yellow-500 disabled:opacity-50"
+          className="btn-small btn-small-amber self-start"
         >
           {isGenerating ? "Generating..." : "Generate MCP URL"}
         </button>
-        <p className="text-xs text-gray-500">
-          ℹ️ Setelah generate, paste URL ke: Claude Web → Settings → Connectors →
-          Add MCP Server
+        <p className="text-xs text-muted">
+          Setelah generate, paste URL ke: Claude Web → Settings → Connectors → Add MCP Server
         </p>
-        {error && <p className="text-xs text-red-500">{error}</p>}
+        {error && <p className="text-xs text-ember">{error}</p>}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded border border-yellow-300 bg-yellow-50 p-4">
-      <p className="text-sm font-bold text-yellow-800">
-        🔑 MCP URL — Rahasia, jangan bagikan!
-      </p>
-      <p className="text-xs text-red-600">
-        ⚠️ Simpan URL ini sekarang! Tidak bisa dilihat lagi setelah refresh.
+    <div className="flex flex-col gap-2">
+      <p className="text-[13px] font-semibold text-gold">🔑 MCP URL — Rahasia, jangan bagikan!</p>
+      <p className="text-xs text-ember">
+        Simpan URL ini sekarang! Tidak bisa dilihat lagi setelah refresh.
       </p>
 
-      <div className="flex gap-2">
-        <input
-          type="text"
-          readOnly
-          value={url}
-          className="flex-1 rounded border border-gray-300 bg-white px-2 py-1.5 font-mono text-xs"
-        />
-        <button
-          onClick={handleCopyUrl}
-          className="shrink-0 rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-300"
-        >
+      <input
+        type="text"
+        readOnly
+        value={url}
+        onFocus={(e) => e.currentTarget.select()}
+        className="mono my-1 w-full rounded-lg border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.06)] px-3.5 py-2.5 text-xs text-brand focus:outline-none"
+      />
+
+      <div className="flex flex-wrap gap-2">
+        <button onClick={handleCopyUrl} className="btn-small btn-small-amber">
           {urlCopied ? "✓ Tersalin" : "Salin URL"}
+        </button>
+        <button onClick={handleRevoke} disabled={isRevoking} className="btn-small">
+          {isRevoking ? "Memproses..." : "Revoke & Generate Ulang"}
         </button>
       </div>
 
-      <div className="text-xs text-gray-600">
-        <p className="font-medium">Cara pakai:</p>
+      <div className="mt-1 text-xs text-muted">
+        <p className="font-medium text-ink">Cara pakai:</p>
         <ol className="list-inside list-decimal">
           <li>Buka claude.ai → Settings → Connectors → Add MCP Server</li>
           <li>Paste URL di atas</li>
@@ -129,15 +128,7 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
         </ol>
       </div>
 
-      {error && <p className="text-xs text-red-500">{error}</p>}
-
-      <button
-        onClick={handleRevoke}
-        disabled={isRevoking}
-        className="self-start rounded bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50"
-      >
-        {isRevoking ? "Memproses..." : "Revoke & Generate Ulang"}
-      </button>
+      {error && <p className="text-xs text-ember">{error}</p>}
     </div>
   );
 }

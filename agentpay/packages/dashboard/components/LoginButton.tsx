@@ -57,10 +57,7 @@ export function LoginButton() {
 
   if (!ready) {
     return (
-      <button
-        disabled
-        className="rounded bg-gray-200 px-4 py-2 font-bold text-gray-400"
-      >
+      <button disabled className="btn-ghost">
         Memuat...
       </button>
     );
@@ -68,29 +65,24 @@ export function LoginButton() {
 
   if (authenticated && address) {
     return (
-      <div className="flex items-center gap-3">
-        <div className="text-sm">
-          <div className="text-xs text-gray-500">Wallet</div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleCopy}
-              className={`cursor-pointer rounded px-2 py-1 font-mono text-xs transition-colors hover:bg-gray-100 ${
-                copied ? "font-bold text-green-600" : ""
-              }`}
-              title="Klik untuk copy address"
-            >
-              {copied ? "✓ Copied!" : `${address.slice(0, 6)}...${address.slice(-4)}`}
-            </button>
-            {idrxBalance !== null && (
-              <span className="text-xs font-semibold text-yellow-600">
-                {idrxBalance.toLocaleString("id-ID")} IDRX
-              </span>
-            )}
-          </div>
-        </div>
+      <div className="flex items-center gap-2 rounded-lg border border-line bg-surface py-1 pl-1 pr-2">
+        <button
+          onClick={handleCopy}
+          className={`mono cursor-pointer rounded-md px-2 py-1 text-xs transition-colors hover:bg-white/5 ${
+            copied ? "font-semibold text-[#4ade80]" : "text-brand"
+          }`}
+          title="Klik untuk copy address"
+        >
+          {copied ? "✓ Copied!" : `${address.slice(0, 6)}...${address.slice(-4)}`}
+        </button>
+        {idrxBalance !== null && (
+          <span className="num hidden text-xs font-semibold text-gold sm:inline">
+            {idrxBalance.toLocaleString("id-ID")} IDRX
+          </span>
+        )}
         <button
           onClick={logout}
-          className="text-sm text-red-500 underline hover:text-red-700"
+          className="ml-1 text-xs text-muted transition-colors hover:text-ember"
         >
           Logout
         </button>
@@ -99,11 +91,8 @@ export function LoginButton() {
   }
 
   return (
-    <button
-      onClick={login}
-      className="rounded bg-yellow-400 px-4 py-2 font-bold text-black transition-colors hover:bg-yellow-500"
-    >
-      Login / Connect Wallet
+    <button onClick={login} className="btn-primary">
+      Launch App
     </button>
   );
 }

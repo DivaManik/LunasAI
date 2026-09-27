@@ -39,6 +39,7 @@ export function CreateCardForm() {
   const [autoLimit, setAutoLimit] = useState("10000");
   const [expiryDays, setExpiryDays] = useState("7");
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const [hash, setHash] = useState<`0x${string}` | null>(null);
   const [cardId, setCardId] = useState<string | null>(null);
@@ -67,12 +68,16 @@ export function CreateCardForm() {
     return null;
   }
 
-  async function handleSubmit(e: FormEvent) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const err = validate();
     setValidationError(err);
     if (err) return;
 
+    setShowConfirmModal(true);
+  }
+
+  async function handleSubmitTransaction() {
     const wallet = wallets.find((w) => w.walletClientType === "privy") ?? wallets[0];
     if (!wallet) {
       setError("Wallet tidak ditemukan. Login ulang.");
@@ -152,74 +157,73 @@ export function CreateCardForm() {
   }
 
   if (!authenticated) {
-    return (
-      <div className="rounded border border-gray-200 bg-white p-6 text-center text-gray-500 shadow-sm">
-        Login untuk melanjutkan
-      </div>
-    );
+    return <div className="panel px-6 py-5 text-center text-sm text-muted">Login untuk melanjutkan</div>;
   }
 
   const isBusy = isApproving || isPending || isConfirming;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded border border-gray-200 bg-white p-6 shadow-sm"
-    >
-      <h2 className="text-lg font-bold">Buat Spending Card Baru</h2>
+    <>
+    <form onSubmit={handleSubmit} className="panel flex flex-col gap-4 px-6 py-6">
+      <div>
+        <h2 className="font-display text-lg font-bold">Buat Kartu Delegasi</h2>
+        <p className="text-[13px] text-muted">
+          IDRX akan di-lock di kontrak sebagai budget AI agent.
+        </p>
+      </div>
 
-      <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
-        Total Budget (IDRX)
-        <input
-          type="number"
-          step="0.01"
-          min="0"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          disabled={isBusy}
-          className="rounded border border-gray-300 px-3 py-2 disabled:bg-gray-100"
-          required
-        />
-      </label>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <label className="label">
+          Total Budget (IDRX)
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            value={budget}
+            onChange={(e) => setBudget(e.target.value)}
+            disabled={isBusy}
+            className="field"
+            required
+          />
+        </label>
 
-      <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
-        Auto-Approve Limit (IDRX)
-        <input
-          type="number"
-          step="0.01"
-          min="0"
-          value={autoLimit}
-          onChange={(e) => setAutoLimit(e.target.value)}
-          disabled={isBusy}
-          className="rounded border border-gray-300 px-3 py-2 disabled:bg-gray-100"
-          required
-        />
-      </label>
+        <label className="label">
+          Auto-Approve Limit (IDRX)
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            value={autoLimit}
+            onChange={(e) => setAutoLimit(e.target.value)}
+            disabled={isBusy}
+            className="field"
+            required
+          />
+        </label>
 
-      <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
-        Berlaku (hari)
-        <input
-          type="number"
-          step="1"
-          min="1"
-          value={expiryDays}
-          onChange={(e) => setExpiryDays(e.target.value)}
-          disabled={isBusy}
-          className="rounded border border-gray-300 px-3 py-2 disabled:bg-gray-100"
-          required
-        />
-      </label>
+        <label className="label">
+          Berlaku (hari)
+          <input
+            type="number"
+            step="1"
+            min="1"
+            value={expiryDays}
+            onChange={(e) => setExpiryDays(e.target.value)}
+            disabled={isBusy}
+            className="field"
+            required
+          />
+        </label>
+      </div>
 
-      {validationError && (
-        <p className="text-sm text-red-500">{validationError}</p>
-      )}
+      {validationError && <p className="text-sm text-ember">{validationError}</p>}
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm text-ember">{error}</p>}
 
       {isConfirmed && hash && (
-        <div className="flex flex-col gap-3 rounded border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-600">
+        <div className="flex flex-col gap-3 rounded-xl border border-[rgba(74,222,128,0.25)] bg-[rgba(34,197,94,0.06)] px-4 py-3 text-sm text-[#4ade80]">
           <div>
-            ✅ Card berhasil dibuat!{" "}
+            ✓ Kartu berhasil dibuat!{" "}
             <a
               href={`${BSCSCAN_TESTNET_URL}/tx/${hash}`}
               target="_blank"
@@ -231,34 +235,30 @@ export function CreateCardForm() {
           </div>
 
           {cardId && (
-            <div className="font-bold text-green-700">Card ID: #{cardId}</div>
+            <div className="font-display text-base font-bold text-gold">Card ID: #{cardId}</div>
           )}
 
-          <div className="flex flex-col gap-1 border-t border-green-200 pt-3 text-gray-700">
+          <div className="flex flex-col gap-1.5 border-t border-line pt-3 text-muted">
             <p>
               Sekarang buka{" "}
               <a
                 href={BOT_TELEGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-yellow-600 underline"
+                className="font-medium text-brand underline"
               >
                 {BOT_USERNAME}
               </a>{" "}
               di Telegram dan ketik:
             </p>
-            <code className="rounded bg-white px-2 py-1 text-gray-900">
+            <code className="rounded-md border border-line bg-surface px-2.5 py-1.5 break-all text-ink">
               /connect {address ?? "<wallet_address_kamu>"}
             </code>
           </div>
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={isBusy}
-        className="rounded bg-yellow-400 px-4 py-2 font-bold text-black hover:bg-yellow-500 disabled:opacity-50"
-      >
+      <button type="submit" disabled={isBusy} className="btn-primary self-start">
         {isApproving
           ? "Approve IDRX..."
           : isPending
@@ -269,13 +269,13 @@ export function CreateCardForm() {
       </button>
 
       {hash && !isConfirmed && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted">
           Tx:{" "}
           <a
             href={`${BSCSCAN_TESTNET_URL}/tx/${hash}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline"
+            className="mono break-all text-brand underline"
           >
             {hash}
           </a>
@@ -283,14 +283,70 @@ export function CreateCardForm() {
       )}
 
       {isConfirmed && (
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="text-sm text-gray-500 underline"
-        >
-          Buat card lain
+        <button type="button" onClick={() => reset()} className="btn-small self-start">
+          Buat kartu lain
         </button>
       )}
     </form>
+
+    {showConfirmModal && (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+        <div className="flex w-full max-w-sm flex-col gap-4 rounded-2xl border border-line bg-card p-6 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
+          <h2 className="font-display text-lg font-bold">💳 Buat Kartu Delegasi</h2>
+
+          <p className="text-sm text-muted">
+            Proses ini membutuhkan <strong className="text-ink">2 konfirmasi wallet</strong>{" "}
+            secara berurutan:
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-3 rounded-xl border border-[rgba(217,119,6,0.15)] bg-[rgba(217,119,6,0.06)] p-3">
+              <span className="text-xl text-brand">①</span>
+              <div>
+                <p className="text-sm font-semibold">Approve IDRX</p>
+                <p className="text-xs text-muted">
+                  Izinkan kontrak mengambil{" "}
+                  <strong className="num text-gold">
+                    {Number(budget).toLocaleString("id-ID")} IDRX
+                  </strong>{" "}
+                  dari saldo kamu sebagai budget kartu
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl border border-[rgba(234,88,12,0.15)] bg-[rgba(234,88,12,0.05)] p-3">
+              <span className="text-xl text-ember">②</span>
+              <div>
+                <p className="text-sm font-semibold">Buat Kartu Delegasi</p>
+                <p className="text-xs text-muted">
+                  IDRX di-lock di dalam kontrak sebagai budget yang bisa dipakai AI agent untuk
+                  belanja
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-dim">
+            Ini normal untuk token ERC-20 — satu kali approve per pembuatan kartu.
+          </p>
+
+          <div className="flex gap-3">
+            <button onClick={() => setShowConfirmModal(false)} className="btn-ghost flex-1">
+              Batal
+            </button>
+            <button
+              onClick={() => {
+                setShowConfirmModal(false);
+                handleSubmitTransaction();
+              }}
+              className="btn-primary flex-1"
+            >
+              Mengerti, Lanjutkan →
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
