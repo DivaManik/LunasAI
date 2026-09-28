@@ -11,7 +11,7 @@ function findMatch(products: Product[], query: string): Product | undefined {
 }
 
 function productList(products: Product[]): string {
-  return products.map((p) => `• ${p.name} — ${p.priceDisplay}`).join("\n");
+  return products.map((p) => `• ${p.name}: ${p.priceDisplay}`).join("\n");
 }
 
 export function registerBuyCommand(bot: Bot): void {

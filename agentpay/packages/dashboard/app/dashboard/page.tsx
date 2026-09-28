@@ -43,7 +43,7 @@ function StatCard({
       <div
         className={`num font-display text-[28px] leading-none font-bold tracking-[-0.02em] ${color}`}
       >
-        {value === null ? "—" : animated.toLocaleString("id-ID")}
+        {value === null ? "..." : animated.toLocaleString("id-ID")}
       </div>
       <div className="mt-1.5 text-xs text-dim">{sub}</div>
     </div>

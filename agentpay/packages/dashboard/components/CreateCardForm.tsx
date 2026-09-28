@@ -70,7 +70,7 @@ export function CreateCardForm({ onSuccess }: { onSuccess?: (cardId: string | nu
   const expiryNum = Number(expiryDays) || 0;
 
   const expiryDate = useMemo(() => {
-    if (!(expiryNum > 0)) return "—";
+    if (!(expiryNum > 0)) return lang === "id" ? "Belum ditentukan" : "Not set";
     const date = new Date(Date.now() + expiryNum * 86400000);
     return date.toLocaleDateString(lang === "id" ? "id-ID" : "en-US", { dateStyle: "long" });
   }, [expiryNum, lang]);

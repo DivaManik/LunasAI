@@ -17,7 +17,7 @@ export function registerBalanceCommand(bot: Bot): void {
       const remaining = BigInt(card.totalBudget) - BigInt(card.spentAmount);
 
       await ctx.reply(
-        `💳 Card ${cardId} — Status: ${card.isActive ? "Active" : "Inactive"}\n\n` +
+        `💳 Card ${cardId}, status: ${card.isActive ? "Active" : "Inactive"}\n\n` +
           `💰 Total budget: ${weiToDisplay(card.totalBudget)}\n` +
           `✅ Spent: ${weiToDisplay(card.spentAmount)}\n` +
           `🔋 Remaining: ${weiToDisplay(remaining.toString())}\n\n` +

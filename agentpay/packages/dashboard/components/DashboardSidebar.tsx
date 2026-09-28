@@ -191,7 +191,11 @@ export function DashboardSidebar({
                 )}
               </button>
               <div className="num text-[13px] font-semibold text-gold">
-                {balance !== null ? `${formatIdrx(balance)} IDRX` : "— IDRX"}
+                {balance !== null
+                  ? `${formatIdrx(balance)} IDRX`
+                  : lang === "id"
+                    ? "Memuat saldo..."
+                    : "Loading balance..."}
               </div>
             </>
           ) : (

@@ -14,8 +14,8 @@ export const t = {
     heading1: { id: "Beri AI Budget,", en: "Give AI a Budget," },
     heading2: { id: "Biarkan Ia Bekerja", en: "Let It Work For You" },
     sub: {
-      id: "Delegasikan pembayaran ke AI agent — on-chain, transparan, dalam kendalimu.",
-      en: "Delegate payments to AI agents — on-chain, transparent, fully in your control.",
+      id: "Delegasikan pembayaran ke AI agent. On-chain, transparan, dalam kendalimu.",
+      en: "Delegate payments to AI agents. Every transaction stays on-chain, transparent, and under your control.",
     },
     cta1: { id: "Mulai Gratis", en: "Get Started Free" },
     cta2: { id: "Lihat Cara Kerja", en: "See How It Works" },
@@ -42,8 +42,8 @@ export const t = {
       {
         title: { id: "AI Payment Otomatis", en: "Autonomous AI Payment" },
         desc: {
-          id: "AI terima HTTP 402, bayar langsung on-chain, lanjut kerja — tanpa interupsi.",
-          en: "AI receives HTTP 402, pays on-chain instantly, keeps working — no interruption.",
+          id: "AI terima HTTP 402, bayar langsung on-chain, lalu lanjut kerja tanpa interupsi.",
+          en: "AI receives HTTP 402, pays on-chain instantly, and keeps working without interruption.",
         },
       },
       {
@@ -114,12 +114,12 @@ export const t = {
   dashboard: {
     title: { id: "Dashboard", en: "Dashboard" },
     subtitleActive: {
-      id: "Selamat datang kembali — kartu aktif kamu berjalan normal.",
-      en: "Welcome back — your active cards are running normally.",
+      id: "Selamat datang kembali. Kartu aktif kamu berjalan normal.",
+      en: "Welcome back. Your active cards are running normally.",
     },
     subtitleEmpty: {
-      id: "Selamat datang — claim IDRX lalu buat kartu delegasi pertamamu.",
-      en: "Welcome — claim IDRX then create your first delegation card.",
+      id: "Selamat datang. Claim IDRX lalu buat kartu delegasi pertamamu.",
+      en: "Welcome. Claim IDRX, then create your first delegation card.",
     },
     subtitleLoggedOut: {
       id: "Kelola kartu delegasi dan budget AI agent kamu.",
@@ -131,8 +131,8 @@ export const t = {
     loadingLabel: { id: "Memuat...", en: "Loading..." },
     loginTitle: { id: "Masuk untuk mulai", en: "Log in to get started" },
     loginSub: {
-      id: "Login dengan Google atau email. Wallet embedded dibuat otomatis — tanpa seed phrase.",
-      en: "Log in with Google or email. Embedded wallet created automatically — no seed phrase.",
+      id: "Login dengan Google atau email. Wallet embedded dibuat otomatis tanpa seed phrase.",
+      en: "Log in with Google or email. Your embedded wallet is created automatically without a seed phrase.",
     },
     btnRefresh: { id: "Refresh", en: "Refresh" },
 
@@ -227,7 +227,7 @@ export const t = {
         id: "Setelah generate, paste URL ke: Claude Web → Settings → Connectors → Add MCP Server",
         en: "After generating, paste the URL into: Claude Web → Settings → Connectors → Add MCP Server",
       },
-      secretTitle: { id: "🔑 MCP URL — Rahasia, jangan bagikan!", en: "🔑 MCP URL — Secret, do not share!" },
+      secretTitle: { id: "🔑 MCP URL: Rahasia, jangan bagikan!", en: "🔑 MCP URL: Secret, do not share!" },
       secretWarning: {
         id: "Simpan URL ini sekarang! Tidak bisa dilihat lagi setelah refresh.",
         en: "Save this URL now! It cannot be viewed again after refresh.",
@@ -302,8 +302,8 @@ export const t = {
         en: "IDRX is locked in the contract as a budget the AI agent can use to spend",
       },
       modalNote: {
-        id: "Ini normal untuk token ERC-20 — satu kali approve per pembuatan kartu.",
-        en: "This is normal for ERC-20 tokens — one approval per card creation.",
+        id: "Ini normal untuk token ERC-20. Kamu cukup memberi satu approval setiap kali membuat kartu.",
+        en: "This is normal for ERC-20 tokens. Each card creation requires one approval.",
       },
       modalCancel: { id: "Batal", en: "Cancel" },
       modalContinue: { id: "Mengerti, Lanjutkan →", en: "Got it, Continue →" },
@@ -447,8 +447,8 @@ export const t = {
       },
       claudeStep4: { id: "Restart Claude Desktop", en: "Restart Claude Desktop" },
       claudeStep5: {
-        id: "Cek ikon 🔌 di chat — LunasAI tools sudah tersedia",
-        en: "Check the 🔌 icon in chat — LunasAI tools are now available",
+        id: "Cek ikon 🔌 di chat. LunasAI tools sudah tersedia",
+        en: "Check the 🔌 icon in chat. LunasAI tools are now available",
       },
 
       cursorStep1: { id: "Buka Cursor Settings (Cmd/Ctrl + Shift + J)", en: "Open Cursor Settings (Cmd/Ctrl + Shift + J)" },
@@ -459,8 +459,8 @@ export const t = {
       cursorStep4Type: { id: "Type: SSE", en: "Type: SSE" },
       cursorStep4Url: { id: "URL:", en: "URL:" },
       cursorStep5: {
-        id: "Klik Save — tools langsung aktif di Cursor Agent",
-        en: "Click Save — tools are instantly active in Cursor Agent",
+        id: "Klik Save. Tools langsung aktif di Cursor Agent",
+        en: "Click Save. The tools are immediately available in Cursor Agent",
       },
 
       windsurfStep1: { id: "Buka Windsurf Settings", en: "Open Windsurf Settings" },
@@ -512,8 +512,8 @@ export const t = {
       step2: { id: 'Klik "Start" di chat Telegram', en: 'Click "Start" in the Telegram chat' },
       step3: { id: "Ketik /start untuk memulai", en: "Type /start to begin" },
       step4: {
-        id: "Bot akan meminta MCP URL kamu — copy dari halaman MCP",
-        en: "The bot will ask for your MCP URL — copy it from the MCP page",
+        id: "Bot akan meminta MCP URL kamu. Copy URL tersebut dari halaman MCP",
+        en: "The bot will ask for your MCP URL. Copy it from the MCP page",
       },
       step5: {
         id: "Paste MCP URL ke bot → AI agent siap digunakan via Telegram",
@@ -542,8 +542,8 @@ export const t = {
         en: "LunasAI's digital store, already live",
       },
       digiStoreHeroDesc: {
-        id: "5 produk digital yang bisa dibeli langsung oleh AI agent via {code} — tanpa approval manual, on-chain dengan IDRX.",
-        en: "5 digital products AI agents can buy directly via {code} — no manual approval, on-chain with IDRX.",
+        id: "5 produk digital yang bisa dibeli langsung oleh AI agent via {code}, tanpa approval manual. Pembayaran menggunakan IDRX dan tercatat on-chain.",
+        en: "AI agents can buy 5 digital products directly via {code} without manual approval. Payments use IDRX and are recorded on-chain.",
       },
       tagProducts: { id: "5 Produk", en: "5 Products" },
       tagHttp402: { id: "HTTP 402", en: "HTTP 402" },
@@ -557,8 +557,8 @@ export const t = {
       willSupport: { id: "Akan mendukung x402 + IDRX", en: "Will support x402 + IDRX" },
       registerTitle: { id: "Daftarkan Merchant Kamu", en: "Register Your Merchant" },
       registerDesc: {
-        id: "Terima pembayaran otomatis dari AI agent via protokol x402. Tidak perlu integrasi rumit — cukup tambahkan endpoint ke website kamu dan mulai terima IDRX.",
-        en: "Accept automatic payments from AI agents via the x402 protocol. No complex integration needed — just add an endpoint to your website and start receiving IDRX.",
+        id: "Terima pembayaran otomatis dari AI agent via protokol x402. Tambahkan endpoint ke website kamu untuk mulai menerima IDRX.",
+        en: "Accept automatic payments from AI agents via the x402 protocol. Add an endpoint to your website to start receiving IDRX.",
       },
       formMerchantName: { id: "Nama Merchant *", en: "Merchant Name *" },
       formMerchantPlaceholder: { id: "Tokoku Store", en: "My Store" },
@@ -593,20 +593,20 @@ export const t = {
       catLicense: { id: "Lisensi", en: "License" },
 
       merchantNusaCartDesc: {
-        id: "Platform belanja digital Indonesia — voucher, top-up, dan hadiah via AI agent.",
-        en: "Indonesian digital shopping platform — vouchers, top-ups, and gifts via AI agent.",
+        id: "Platform belanja digital Indonesia untuk voucher, top-up, dan hadiah via AI agent.",
+        en: "An Indonesian digital shopping platform for vouchers, top-ups, and gifts purchased through AI agents.",
       },
       merchantZipRideDesc: {
         id: "Pesan ojek, makanan, dan kurir otomatis lewat AI agent tanpa buka app.",
         en: "Order rides, food, and courier services automatically via AI agent, no app needed.",
       },
       merchantPageOneDesc: {
-        id: "E-book, audiobook, dan majalah digital premium — langsung ke AI agent kamu.",
-        en: "Premium e-books, audiobooks, and digital magazines — delivered straight to your AI agent.",
+        id: "E-book, audiobook, dan majalah digital premium yang dikirim langsung ke AI agent kamu.",
+        en: "Premium e-books, audiobooks, and digital magazines delivered straight to your AI agent.",
       },
       merchantSkillLoopDesc: {
-        id: "Ribuan kursus online, sertifikasi, dan workshop — dibeli AI agent sesuai kebutuhan.",
-        en: "Thousands of online courses, certifications, and workshops — purchased by AI agent on demand.",
+        id: "Ribuan kursus online, sertifikasi, dan workshop yang bisa dibeli AI agent sesuai kebutuhan.",
+        en: "Thousands of online courses, certifications, and workshops that AI agents can purchase on demand.",
       },
       merchantCatEcommerce: { id: "E-Commerce", en: "E-Commerce" },
       merchantCatSuperApp: { id: "Super App", en: "Super App" },

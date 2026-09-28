@@ -128,7 +128,7 @@ app.get("/", (_req, res) => {
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>DigiStore — Toko Digital Web3</title>
+  <title>DigiStore: Toko Digital Web3</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"/>
   <style>
@@ -668,8 +668,8 @@ app.get("/", (_req, res) => {
     </div>
     <h1><span data-i18n="heroTitle">Toko Digital untuk</span><br/><span class="grad">AI Agent</span></h1>
     <p class="hero-sub" data-i18n="heroSub">
-      Produk digital yang dapat dibeli secara otomatis oleh AI agent via protokol x402 —
-      tanpa approval manual, pembayaran langsung on-chain dengan IDRX.
+      Produk digital yang dapat dibeli secara otomatis oleh AI agent via protokol x402.
+      Tidak perlu approval manual, pembayaran langsung on-chain dengan IDRX.
     </p>
     <div class="stats-row">
       <div class="stat">
@@ -710,7 +710,7 @@ app.get("/", (_req, res) => {
     <p class="how-sub" data-i18n="howSub">
       AI agent dari <strong style="color:var(--accent)">LunasAI</strong> menggunakan tool
       <span class="code-pill">paid_fetch</span> dari MCP server.
-      Proses pembayaran terjadi sepenuhnya otomatis — on-chain, tanpa intervensi manusia.
+      Proses pembayaran berjalan otomatis dan tercatat on-chain tanpa intervensi manusia.
     </p>
     <div class="how-steps">
       <div class="how-step">
@@ -727,7 +727,7 @@ app.get("/", (_req, res) => {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
         </div>
         <h4>HTTP 402</h4>
-        <p data-i18n="step2desc">Server balas dengan payment info — harga &amp; productId</p>
+        <p data-i18n="step2desc">Server membalas dengan payment info: harga &amp; productId</p>
       </div>
       <div class="how-step">
         <div class="how-step-num">STEP 03</div>
@@ -743,7 +743,7 @@ app.get("/", (_req, res) => {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
         </div>
         <h4 data-i18n="step4title">Konten Dikirim</h4>
-        <p data-i18n="step4desc">Fetch ulang dengan <span class="code-pill">X-Payment: txHash</span> — konten digital langsung diterima</p>
+        <p data-i18n="step4desc">Fetch ulang dengan <span class="code-pill">X-Payment: txHash</span>. Konten digital langsung diterima</p>
       </div>
     </div>
   </div>
@@ -759,8 +759,8 @@ app.get("/", (_req, res) => {
       <div class="modal-title" data-i18n="modalTitle">Konfirmasi Pembayaran</div>
       <p class="modal-sub" data-i18n="modalSub">Pilih wallet untuk menyelesaikan transaksi on-chain via IDRX</p>
       <div class="modal-product-info">
-        <div class="mpi-name" id="modalProductName">—</div>
-        <div class="mpi-price" id="modalProductPrice">—</div>
+        <div class="mpi-name" id="modalProductName">Belum dipilih</div>
+        <div class="mpi-price" id="modalProductPrice">Harga belum tersedia</div>
       </div>
       <div class="wallet-options">
         <button class="wallet-btn" onclick="startPayment('metamask')">
@@ -823,11 +823,11 @@ app.get("/", (_req, res) => {
         <div class="receipt">
           <div class="receipt-row">
             <span class="receipt-label" data-i18n="rcpProduct">Produk</span>
-            <span class="receipt-val" id="rcpProduct">—</span>
+            <span class="receipt-val" id="rcpProduct">Belum tersedia</span>
           </div>
           <div class="receipt-row">
             <span class="receipt-label" data-i18n="rcpAmount">Jumlah</span>
-            <span class="receipt-val" id="rcpAmount">—</span>
+            <span class="receipt-val" id="rcpAmount">Belum tersedia</span>
           </div>
           <div class="receipt-row">
             <span class="receipt-label" data-i18n="rcpNetwork">Network</span>
@@ -839,7 +839,7 @@ app.get("/", (_req, res) => {
           </div>
           <div class="receipt-row">
             <span class="receipt-label" data-i18n="rcpTime">Waktu</span>
-            <span class="receipt-val" id="rcpTime">—</span>
+            <span class="receipt-val" id="rcpTime">Belum tersedia</span>
           </div>
         </div>
         <div class="txhash-row">
@@ -864,14 +864,14 @@ app.get("/", (_req, res) => {
   const STRINGS = {
     id: {
       heroTitle: "Toko Digital untuk",
-      heroSub: "Produk digital yang dapat dibeli secara otomatis oleh AI agent via protokol x402 — tanpa approval manual, pembayaran langsung on-chain dengan IDRX.",
+      heroSub: "Produk digital yang dapat dibeli secara otomatis oleh AI agent via protokol x402. Tidak perlu approval manual, pembayaran langsung on-chain dengan IDRX.",
       statProducts: "Produk", statProtocol: "Protokol", statToken: "Token", statApproval: "Approval",
       sectionProducts: "Produk Tersedia",
       howTitle: "Bagaimana AI Agent Membeli di Sini?",
-      howSub: "AI agent dari LunasAI menggunakan tool paid_fetch dari MCP server. Proses pembayaran terjadi sepenuhnya otomatis — on-chain, tanpa intervensi manusia.",
-      step2desc: "Server balas dengan payment info — harga & productId",
+      howSub: "AI agent dari LunasAI menggunakan tool paid_fetch dari MCP server. Proses pembayaran berjalan otomatis dan tercatat on-chain tanpa intervensi manusia.",
+      step2desc: "Server membalas dengan payment info: harga & productId",
       step3title: "Bayar IDRX", step3desc: "Agent bayar on-chain via ERC-20 IDRX di BNB Testnet",
-      step4title: "Konten Dikirim", step4desc: "Fetch ulang dengan X-Payment: txHash — konten digital langsung diterima",
+      step4title: "Konten Dikirim", step4desc: "Fetch ulang dengan X-Payment: txHash. Konten digital langsung diterima",
       catSubscription: "Langganan", catEbook: "E-Book", catCourse: "Kursus", catLicense: "Lisensi",
       feat1: "Pengiriman instan", feat2: "Bayar via IDRX", feat3: "AI agent compatible",
       buyNow: "Beli Sekarang",
@@ -895,14 +895,14 @@ app.get("/", (_req, res) => {
     },
     en: {
       heroTitle: "Digital Store for",
-      heroSub: "Digital products that can be purchased automatically by AI agents via the x402 protocol — no manual approval, payments directly on-chain with IDRX.",
+      heroSub: "AI agents can purchase digital products automatically through the x402 protocol. Payments use IDRX on-chain without manual approval.",
       statProducts: "Products", statProtocol: "Protocol", statToken: "Token", statApproval: "Approval",
       sectionProducts: "Available Products",
       howTitle: "How Does an AI Agent Buy Here?",
-      howSub: "LunasAI's AI agent uses the paid_fetch tool from the MCP server. The payment process is fully automatic — on-chain, no human intervention.",
-      step2desc: "Server responds with payment info — price & productId",
+      howSub: "LunasAI's AI agent uses the paid_fetch tool from the MCP server. The payment runs automatically on-chain without human intervention.",
+      step2desc: "The server responds with payment info: price & productId",
       step3title: "Pay IDRX", step3desc: "Agent pays on-chain via ERC-20 IDRX on BNB Testnet",
-      step4title: "Content Delivered", step4desc: "Re-fetch with X-Payment: txHash — digital content received instantly",
+      step4title: "Content Delivered", step4desc: "Re-fetch with X-Payment: txHash. The digital content arrives immediately",
       catSubscription: "Subscription", catEbook: "E-Book", catCourse: "Course", catLicense: "License",
       feat1: "Instant delivery", feat2: "Pay via IDRX", feat3: "AI agent compatible",
       buyNow: "Buy Now",
@@ -1294,7 +1294,7 @@ app.get("/", (_req, res) => {
 <!-- FOOTER -->
 <footer>
   <div class="footer-left">
-    <strong>DigiStore</strong> &mdash; <span data-i18n="footerText">Demo merchant untuk Indonesia Web3 Hackathon 2026</span>
+    <strong>DigiStore:</strong> <span data-i18n="footerText">Demo merchant untuk Indonesia Web3 Hackathon 2026</span>
   </div>
   <div class="footer-right">
     <span class="pill pill-blue">x402 Protocol</span>

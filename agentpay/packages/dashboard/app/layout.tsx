@@ -23,7 +23,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LunasAI — AI Agent yang Bisa Bayar Sendiri",
+  title: "LunasAI: AI Agent yang Bisa Bayar Sendiri",
   description:
     "Beri AI budget IDRX lewat kartu delegasi on-chain di BNB Chain. Kelola spending card LunasAI kamu.",
 };
