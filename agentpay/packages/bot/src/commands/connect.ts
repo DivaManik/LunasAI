@@ -9,7 +9,7 @@ export function registerConnectCommand(bot: Bot): void {
 
     if (!walletAddress || !WALLET_REGEX.test(walletAddress)) {
       await ctx.reply(
-        "❌ Format wallet tidak valid.\nGunakan: /connect 0x1234...abcd (harus 0x + 40 karakter hex)"
+        "❌ Invalid wallet format.\nUse: /connect 0x1234...abcd (must be 0x + 40 hex characters)"
       );
       return;
     }
@@ -17,19 +17,19 @@ export function registerConnectCommand(bot: Bot): void {
     try {
       const { message } = await requestNonce(walletAddress, String(ctx.chat.id));
       await ctx.reply(
-        `🔐 *Verifikasi Kepemilikan Wallet*\n\n` +
-          `Untuk membuktikan kamu pemilik wallet ini, lakukan:\n\n` +
-          `1. Buka dashboard AgentPay\n` +
-          `2. Klik tombol *"Sign Message"*\n` +
-          `3. MetaMask akan minta tanda tangan untuk pesan:\n\n` +
+        `🔐 *Wallet Ownership Verification*\n\n` +
+          `To prove you own this wallet:\n\n` +
+          `1. Open the LunasAI dashboard\n` +
+          `2. Click *"Sign Message"*\n` +
+          `3. MetaMask will ask you to sign this message:\n\n` +
           `\`${message}\`\n\n` +
-          `4. Setelah dapat signature, kirim ke sini:\n` +
+          `4. Once you have the signature, send it here:\n` +
           `/verify <signature>\n\n` +
-          `⏰ Berlaku 10 menit.`,
+          `⏰ Valid for 10 minutes.`,
         { parse_mode: "Markdown" }
       );
     } catch (err) {
-      const errMessage = err instanceof ApiError ? err.message : "Server sedang tidak tersedia. Coba lagi.";
+      const errMessage = err instanceof ApiError ? err.message : "Server unavailable. Please try again.";
       await ctx.reply(`❌ ${errMessage}`);
     }
   });

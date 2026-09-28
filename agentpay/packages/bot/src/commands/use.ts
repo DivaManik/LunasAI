@@ -8,12 +8,12 @@ export function registerUseCommand(bot: Bot): void {
     const cardId = ctx.match?.toString().trim();
 
     if (!connectedWallets.has(String(ctx.chat.id))) {
-      await ctx.reply("Kamu belum connect wallet. Ketik /connect <wallet_address> dulu.");
+      await ctx.reply("You haven't connected a wallet yet. Type /connect <wallet_address> first.");
       return;
     }
 
     if (!cardId) {
-      await ctx.reply("❌ Gunakan: /use <card_id>\nContoh: /use 1");
+      await ctx.reply("❌ Use: /use <card_id>\nExample: /use 1");
       return;
     }
 
@@ -21,7 +21,7 @@ export function registerUseCommand(bot: Bot): void {
       const card = await getCard(cardId);
 
       if (!card.isActive) {
-        await ctx.reply("❌ Card ini sudah tidak aktif (revoked atau expired).");
+        await ctx.reply("❌ This card is no longer active (revoked or expired).");
         return;
       }
 
@@ -29,18 +29,18 @@ export function registerUseCommand(bot: Bot): void {
 
       const remaining = BigInt(card.totalBudget) - BigInt(card.spentAmount);
       await ctx.reply(
-        `✅ Card ${cardId} aktif!\n\n` +
-          `💰 Sisa budget: ${weiToDisplay(remaining.toString())}\n` +
-          `⚡ Auto-approve hingga: ${weiToDisplay(card.autoApproveLimit)}\n` +
-          `📅 Berlaku hingga: ${formatDate(card.expiryTimestamp)}\n\n` +
-          `Ketik /buy <nama_item> untuk mulai belanja!`
+        `✅ Card ${cardId} is now active!\n\n` +
+          `💰 Remaining budget: ${weiToDisplay(remaining.toString())}\n` +
+          `⚡ Auto-approve up to: ${weiToDisplay(card.autoApproveLimit)}\n` +
+          `📅 Valid until: ${formatDate(card.expiryTimestamp)}\n\n` +
+          `Type /buy <item_name> to start shopping!`
       );
     } catch (err) {
       if (err instanceof ApiError && /not found/i.test(err.message)) {
-        await ctx.reply(`❌ Card ID ${cardId} tidak ditemukan.`);
+        await ctx.reply(`❌ Card ID ${cardId} not found.`);
         return;
       }
-      const message = err instanceof ApiError ? err.message : "Server sedang tidak tersedia. Coba lagi.";
+      const message = err instanceof ApiError ? err.message : "Server unavailable. Please try again.";
       await ctx.reply(`❌ ${message}`);
     }
   });

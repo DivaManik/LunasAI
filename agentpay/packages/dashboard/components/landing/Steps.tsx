@@ -1,7 +1,10 @@
 import Image from "next/image";
-import type { RefObject } from "react";
+import { Bot, CheckCircle, CreditCard, Wallet, type LucideIcon } from "lucide-react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 import { t, type Lang } from "@/lib/i18n";
 import { Reveal } from "../Reveal";
+
+const STEP_ICONS: LucideIcon[] = [Wallet, CreditCard, Bot, CheckCircle];
 
 export function Steps({
   lang,
@@ -12,6 +15,35 @@ export function Steps({
   bgRef: RefObject<HTMLDivElement | null>;
   sectionRef: RefObject<HTMLElement | null>;
 }) {
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [visibleSteps, setVisibleSteps] = useState<number[]>([]);
+  const [progressHeight, setProgressHeight] = useState(0);
+
+  useEffect(() => {
+    const total = t.steps.items.length;
+    const observers = stepRefs.current.map((el, i) => {
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          setVisibleSteps((prev) => {
+            const next = entry.isIntersecting
+              ? prev.includes(i)
+                ? prev
+                : [...prev, i]
+              : prev.filter((s) => s !== i);
+            setProgressHeight(next.length === 0 ? 0 : ((Math.max(...next) + 1) / total) * 100);
+            return next;
+          });
+        },
+        { threshold: 0.4 }
+      );
+      obs.observe(el);
+      return obs;
+    });
+
+    return () => observers.forEach((obs) => obs?.disconnect());
+  }, []);
+
   return (
     <section
       id="howitworks"
@@ -31,20 +63,50 @@ export function Steps({
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {t.steps.items.map((step, i) => (
-            <Reveal
-              key={step.num}
-              delay={i * 0.1}
-              className="group relative rounded-2xl border border-line bg-[rgba(18,17,24,0.8)] p-7 backdrop-blur-sm hover:border-line-amber"
-            >
-              <div className="gradient-text mb-6 font-display text-5xl leading-none font-extrabold opacity-80">
-                {step.num}
+        <div className="steps-container relative mx-auto max-w-[720px]">
+          <div className="timeline-track absolute top-0 left-6 h-full w-0.5 bg-line md:left-1/2 md:-translate-x-1/2" />
+          <div
+            className="timeline-progress absolute top-0 left-6 w-0.5 bg-brand transition-[height] duration-1000 ease-in-out md:left-1/2 md:-translate-x-1/2"
+            style={{ height: `${progressHeight}%` }}
+          />
+
+          {t.steps.items.map((step, i) => {
+            const Icon = STEP_ICONS[i];
+            const isVisible = visibleSteps.includes(i);
+            return (
+              <div
+                key={step.num}
+                ref={(el) => {
+                  stepRefs.current[i] = el;
+                }}
+                className={`step-item relative mb-12 flex items-center gap-6 pl-16 transition-all duration-1000 ease-in-out last:mb-0 md:gap-8 md:pl-0 ${
+                  isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+                } ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+              >
+                <div
+                  className={`step-node absolute top-0 left-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-1000 ease-in-out md:static md:left-auto ${
+                    isVisible
+                      ? "step-node-glow border-brand bg-[rgba(217,119,6,0.2)] text-brand"
+                      : "border-line bg-surface text-dim"
+                  }`}
+                >
+                  <Icon size={20} />
+                </div>
+
+                <div
+                  className={`step-content flex-1 rounded-xl border bg-[rgba(18,17,24,0.8)] p-6 backdrop-blur-sm transition-all duration-1000 ease-in-out ${
+                    isVisible ? "step-content-glow border-line-amber" : "border-line"
+                  }`}
+                >
+                  <span className="mono text-sm font-semibold text-brand">Step {i + 1}</span>
+                  <h3 className="mt-1 mb-2 font-display text-lg font-semibold">
+                    {step.title[lang]}
+                  </h3>
+                  <p className="text-sm leading-[1.65] text-muted">{step.desc[lang]}</p>
+                </div>
               </div>
-              <h3 className="mb-2.5 font-display text-lg font-semibold">{step.title[lang]}</h3>
-              <p className="text-sm leading-[1.65] text-muted">{step.desc[lang]}</p>
-            </Reveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

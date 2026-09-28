@@ -8,7 +8,7 @@ export function registerBalanceCommand(bot: Bot): void {
     const cardId = activeCards.get(String(ctx.chat.id));
 
     if (!cardId) {
-      await ctx.reply("❌ Belum ada card aktif.\nGunakan /use <card_id> terlebih dahulu.");
+      await ctx.reply("❌ No active card.\nUse /use <card_id> first.");
       return;
     }
 
@@ -17,15 +17,15 @@ export function registerBalanceCommand(bot: Bot): void {
       const remaining = BigInt(card.totalBudget) - BigInt(card.spentAmount);
 
       await ctx.reply(
-        `💳 Card ${cardId} — Status ${card.isActive ? "Aktif" : "Tidak Aktif"}\n\n` +
+        `💳 Card ${cardId} — Status: ${card.isActive ? "Active" : "Inactive"}\n\n` +
           `💰 Total budget: ${weiToDisplay(card.totalBudget)}\n` +
-          `✅ Sudah dipakai: ${weiToDisplay(card.spentAmount)}\n` +
-          `🔋 Sisa: ${weiToDisplay(remaining.toString())}\n\n` +
-          `⚡ Auto-approve hingga: ${weiToDisplay(card.autoApproveLimit)}\n` +
-          `📅 Berlaku hingga: ${formatDate(card.expiryTimestamp)}`
+          `✅ Spent: ${weiToDisplay(card.spentAmount)}\n` +
+          `🔋 Remaining: ${weiToDisplay(remaining.toString())}\n\n` +
+          `⚡ Auto-approve up to: ${weiToDisplay(card.autoApproveLimit)}\n` +
+          `📅 Valid until: ${formatDate(card.expiryTimestamp)}`
       );
     } catch (err) {
-      const message = err instanceof ApiError ? err.message : "Server sedang tidak tersedia. Coba lagi.";
+      const message = err instanceof ApiError ? err.message : "Server unavailable. Please try again.";
       await ctx.reply(`❌ ${message}`);
     }
   });

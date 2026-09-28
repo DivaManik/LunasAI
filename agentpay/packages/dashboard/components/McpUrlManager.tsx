@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { BACKEND_URL } from "@/lib/constants";
 import { t } from "@/lib/i18n";
 import { useLangContext } from "./LangProvider";
@@ -9,7 +10,11 @@ function storageKey(cardId: string | number): string {
   return `mcp-url-${cardId}`;
 }
 
-function readStoredUrl(cardId: string | number): string | null {
+function maskUrl(url: string): string {
+  return url.replace(/(\/mcp\/)(.+)/, "$1" + "•".repeat(24));
+}
+
+export function readStoredMcpUrl(cardId: string | number): string | null {
   try {
     return localStorage.getItem(storageKey(cardId));
   } catch {
@@ -24,9 +29,10 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
   const [isRevoking, setIsRevoking] = useState(false);
   const [urlCopied, setUrlCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showUrl, setShowUrl] = useState(false);
 
   useEffect(() => {
-    setUrl(readStoredUrl(cardId));
+    setUrl(readStoredMcpUrl(cardId));
   }, [cardId]);
 
   async function handleGenerate() {
@@ -46,6 +52,7 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
         // localStorage bisa gagal di private mode — URL tetap ditampilkan dari state
       }
       setUrl(mcpUrl);
+      window.dispatchEvent(new Event("mcp-url-changed"));
     } catch {
       setError(t.dashboard.mcp.errGenerate[lang]);
     } finally {
@@ -66,6 +73,7 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
         // ignore
       }
       setUrl(null);
+      window.dispatchEvent(new Event("mcp-url-changed"));
     } catch {
       setError(t.dashboard.mcp.errRevoke[lang]);
     } finally {
@@ -101,13 +109,17 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
       <p className="text-[13px] font-semibold text-gold">{t.dashboard.mcp.secretTitle[lang]}</p>
       <p className="text-xs text-ember">{t.dashboard.mcp.secretWarning[lang]}</p>
 
-      <input
-        type="text"
-        readOnly
-        value={url}
-        onFocus={(e) => e.currentTarget.select()}
-        className="mono my-1 w-full rounded-lg border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.06)] px-3.5 py-2.5 text-xs text-brand focus:outline-none"
-      />
+      <div className="mono my-1 flex w-full items-center gap-2 rounded-lg border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.06)] px-3.5 py-2.5">
+        <span className="flex-1 truncate text-xs text-brand">{showUrl ? url : maskUrl(url)}</span>
+        <button
+          type="button"
+          onClick={() => setShowUrl((v) => !v)}
+          title={showUrl ? t.dashboard.mcp.hideUrl[lang] : t.dashboard.mcp.showUrl[lang]}
+          className="shrink-0 text-dim transition-colors hover:text-brand"
+        >
+          {showUrl ? <EyeOff size={14} /> : <Eye size={14} />}
+        </button>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         <button onClick={handleCopyUrl} className="btn-small btn-small-amber">

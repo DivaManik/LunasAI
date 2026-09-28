@@ -1,5 +1,6 @@
 "use client";
 
+import { Send } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { SignMessage } from "@/components/SignMessage";
 import { useLangContext } from "@/components/LangProvider";
@@ -32,9 +33,16 @@ export default function TelegramPage() {
         <div className="panel px-6 py-6 text-center">
           <h1 className="mb-2 font-display text-xl font-bold">{tp.title[lang]}</h1>
           <p className="mb-4 text-sm text-muted">{tp.intro[lang]}</p>
-          <div className="mono inline-block rounded-lg border border-[rgba(217,119,6,0.15)] bg-[rgba(217,119,6,0.06)] px-4 py-2 text-sm text-brand">
-            {BOT_USERNAME}
-          </div>
+          <div className="mono mb-4 text-lg font-bold text-brand">{BOT_USERNAME}</div>
+          <a
+            href={BOT_TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            <Send size={15} />
+            {tp.openBotHero[lang]}
+          </a>
         </div>
 
         <div className="panel px-6 py-6">
@@ -66,15 +74,6 @@ export default function TelegramPage() {
             ))}
           </div>
         </div>
-
-        <a
-          href={BOT_TELEGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-primary self-center"
-        >
-          {tp.openBot[lang]}
-        </a>
 
         <SignMessage />
       </div>

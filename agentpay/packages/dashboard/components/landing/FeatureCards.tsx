@@ -1,11 +1,26 @@
 import Image from "next/image";
+import { CreditCard, Link2, Zap } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
 import { Reveal } from "../Reveal";
 
+const AMBER = "#d97706";
+
 const CARD_VISUALS = [
-  { image: "/images/card-delegation.jpg", icon: "💳" },
-  { image: "/images/card-ai.jpg", icon: "🤖" },
-  { image: "/images/card-blockchain.jpg", icon: "⛓️" },
+  {
+    before: "/images/card1-before.jpg",
+    hover: "/images/card1-hover.jpg",
+    icon: <CreditCard size={20} color={AMBER} />,
+  },
+  {
+    before: "/images/card2-before.jpg",
+    hover: "/images/card2-hover.jpg",
+    icon: <Zap size={20} color={AMBER} />,
+  },
+  {
+    before: "/images/card3-before.jpg",
+    hover: "/images/card3-hover.jpg",
+    icon: <Link2 size={20} color={AMBER} />,
+  },
 ];
 
 export function FeatureCards({ lang }: { lang: Lang }) {
@@ -22,16 +37,21 @@ export function FeatureCards({ lang }: { lang: Lang }) {
       <Reveal>
         <div className="feature-row">
           {t.features.cards.map((card, i) => (
-            <article key={card.title.en} className="feature-card">
-              <div className="feature-card-bg">
-                <Image
-                  src={CARD_VISUALS[i].image}
-                  alt=""
-                  fill
-                  sizes="(max-width: 768px) 100vw, 60vw"
-                  className="object-cover"
-                />
-              </div>
+            <article key={card.title.en} className="feature-card" data-card={i + 1}>
+              <Image
+                src={CARD_VISUALS[i].before}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="card-image-before object-cover"
+              />
+              <Image
+                src={CARD_VISUALS[i].hover}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="card-image-hover object-cover"
+              />
               <div className="feature-card-overlay" />
 
               <div className="absolute top-8 left-8 flex items-center gap-3">

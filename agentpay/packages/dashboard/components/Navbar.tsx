@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { t, type Lang } from "@/lib/i18n";
 import { useLangContext } from "./LangProvider";
 import { LoginButton } from "./LoginButton";
@@ -29,8 +30,7 @@ function LangToggle({ lang, toggle }: { lang: Lang; toggle: () => void }) {
   );
 }
 
-const navLinkClass =
-  "hidden rounded-md border px-3.5 py-1.5 text-sm font-medium transition-colors md:inline-block";
+const navLinkClass = "nav-item hidden text-sm font-medium md:inline-block";
 
 function useActiveSection() {
   const pathname = usePathname();
@@ -49,17 +49,35 @@ function useActiveSection() {
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (window.scrollY < 200) {
+          setSection(null);
+          return;
+        }
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible) setSection(visible.target.id);
-        else if (window.scrollY < 200) setSection(null);
       },
       { rootMargin: "-80px 0px -60% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
 
     targets.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+
+    // IntersectionObserver hanya callback saat ada elemen yang melintasi
+    // threshold — scroll cepat langsung ke atas (mis. via tombol Home/logo,
+    // atau lompat jauh) bisa tidak memicu callback baru sama sekali, jadi
+    // section aktif nyangkut di nilai lama. Scroll listener ringan ini
+    // memaksa clear begitu benar-benar dekat top, independen dari observer.
+    const handleScroll = () => {
+      if (window.scrollY < 200) setSection(null);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [pathname]);
 
   return section;
@@ -68,15 +86,36 @@ function useActiveSection() {
 export function Navbar() {
   const { lang, toggle } = useLangContext();
   const pathname = usePathname();
+  const router = useRouter();
   const activeSection = useActiveSection();
-  const isDashboard = pathname === "/cards";
+  const isDashboard = pathname.startsWith("/dashboard");
+
+  const { ready, authenticated } = usePrivy();
+  const { wallets } = useWallets();
+  const embeddedWallet = wallets.find((w) => w.walletClientType === "privy");
+  const externalWallet = wallets.find((w) => w.walletClientType !== "privy");
+  const isLoggedIn = ready && authenticated && !!(embeddedWallet?.address || externalWallet?.address);
+
+  // Redirect ke dashboard hanya pada transisi login (belum login -> login),
+  // bukan setiap kali authenticated user berada di "/" (mis. klik logo/Home
+  // sengaja balik ke landing page setelah login harus tetap dibiarkan).
+  const wasLoggedIn = useRef(isLoggedIn);
+  useEffect(() => {
+    if (isLoggedIn && !wasLoggedIn.current && pathname === "/") {
+      router.replace("/dashboard");
+    }
+    wasLoggedIn.current = isLoggedIn;
+  }, [isLoggedIn, pathname, router]);
 
   function linkClass(isActive: boolean) {
-    return `${navLinkClass} ${
-      isActive
-        ? "border-[rgba(217,119,6,0.3)] bg-[rgba(217,119,6,0.08)] text-brand"
-        : "border-transparent text-muted hover:text-ink"
-    }`;
+    return `${navLinkClass} ${isActive ? "active text-brand" : "text-muted"}`;
+  }
+
+  function scrollToTop(e: React.MouseEvent) {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
 
   return (
@@ -89,19 +128,24 @@ export function Navbar() {
         LunasAI
       </Link>
 
-      <div className="flex items-center gap-2">
+      <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+        <Link href="/" onClick={scrollToTop} className={linkClass(pathname === "/" && !activeSection)}>
+          {t.nav.home[lang]}
+        </Link>
         <Link href="/#features" className={linkClass(activeSection === "features")}>
           {t.nav.features[lang]}
         </Link>
         <Link href="/#howitworks" className={linkClass(activeSection === "howitworks")}>
           {t.nav.howItWorks[lang]}
         </Link>
-        <Link
-          href="/cards"
-          className={`hidden md:inline-flex ${isDashboard ? "btn-ghost !border-[rgba(217,119,6,0.3)] !text-brand" : "btn-ghost"}`}
-        >
-          {t.nav.dashboard[lang]} →
-        </Link>
+        {isLoggedIn && (
+          <Link href="/dashboard" className={linkClass(isDashboard)}>
+            {t.nav.dashboard[lang]}
+          </Link>
+        )}
+      </div>
+
+      <div className="flex items-center gap-2">
         <LangToggle lang={lang} toggle={toggle} />
         <LoginButton />
       </div>

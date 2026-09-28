@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
+import { Check, Copy, ShoppingCart, Wallet } from "lucide-react";
 import { SHOP_URL, formatIdrx } from "@/lib/constants";
 import { t } from "@/lib/i18n";
 import { useLangContext } from "./LangProvider";
@@ -42,11 +43,7 @@ const ICONS = {
       <path d="M14.5 2.5 1.8 7.4c-.6.24-.6.9 0 1.13l3.1 1.1 1.2 3.7c.18.53.87.62 1.19.16l1.4-2 3 2.2c.5.36 1.2.1 1.35-.5l2-9.9c.15-.7-.5-1.24-1.14-.99Z" />
     </svg>
   ),
-  shop: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M3 8a5 5 0 0 1 5-5v1.5A3.5 3.5 0 0 0 4.5 8H3Zm5-5a5 5 0 0 1 5 5h-1.5A3.5 3.5 0 0 0 8 4.5V3Zm5 5a5 5 0 0 1-5 5v-1.5A3.5 3.5 0 0 0 11.5 8H13ZM8 13a5 5 0 0 1-5-5h1.5A3.5 3.5 0 0 0 8 11.5V13Z" />
-    </svg>
-  ),
+  shop: <ShoppingCart size={16} />,
   power: (
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
       <path d="M8 2v6" />
@@ -108,6 +105,12 @@ export function DashboardSidebar({
         { href: "/dashboard/telegram", label: t.dashboard.telegram.heading[lang], icon: ICONS.telegram },
       ],
     },
+    {
+      title: lang === "id" ? "Ekosistem" : "Ecosystem",
+      items: [
+        { href: "/dashboard/shop", label: lang === "id" ? "Toko Digital" : "Digital Store", icon: ICONS.shop },
+      ],
+    },
   ];
 
   return (
@@ -153,23 +156,41 @@ export function DashboardSidebar({
         </div>
       ))}
 
-      <div className="mt-auto flex flex-col gap-2 p-3 pb-6">
-        <div className="rounded-[10px] border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.06)] p-3.5">
-          <div className="mb-1.5 text-xs text-muted">{s.wallet[lang]}</div>
+      <div className="mt-auto flex flex-col gap-2 px-3 pt-3 pb-4">
+        <div className="rounded-xl border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.06)] p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs text-muted">
+              <Wallet size={12} />
+              <span>{s.wallet[lang]}</span>
+            </div>
+            {address && (
+              <div className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_6px_rgba(74,222,128,0.6)]" />
+            )}
+          </div>
+
           {address ? (
             <>
               <button
                 onClick={handleCopy}
                 title={t.dashboard.login.copyTitle[lang]}
-                className={`mono cursor-pointer text-left text-[11px] transition-colors hover:underline ${
-                  copied ? "font-semibold text-[#4ade80]" : "text-brand"
-                }`}
+                className="group mb-2 flex w-full items-center gap-1.5"
               >
-                {copied
-                  ? t.dashboard.login.copied[lang]
-                  : `${address.slice(0, 6)}...${address.slice(-4)}`}
+                <span
+                  className={`mono text-[11px] transition-colors ${
+                    copied ? "font-semibold text-[#4ade80]" : "text-brand group-hover:underline"
+                  }`}
+                >
+                  {copied
+                    ? t.dashboard.login.copied[lang]
+                    : `${address.slice(0, 6)}...${address.slice(-4)}`}
+                </span>
+                {copied ? (
+                  <Check size={11} className="shrink-0 text-[#4ade80]" />
+                ) : (
+                  <Copy size={11} className="shrink-0 text-dim transition-colors group-hover:text-brand" />
+                )}
               </button>
-              <div className="num mt-1.5 text-[13px] font-semibold text-gold">
+              <div className="num text-[13px] font-semibold text-gold">
                 {balance !== null ? `${formatIdrx(balance)} IDRX` : "— IDRX"}
               </div>
             </>

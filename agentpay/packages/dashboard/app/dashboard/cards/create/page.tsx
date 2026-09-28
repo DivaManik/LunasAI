@@ -25,7 +25,7 @@ export default function CreateCardPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[560px]">
+    <div className="mx-auto max-w-[980px]">
       <Breadcrumb
         crumbs={[
           { label: d.breadcrumb.dashboard[lang], href: "/dashboard" },

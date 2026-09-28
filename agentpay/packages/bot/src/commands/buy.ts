@@ -20,40 +20,40 @@ export function registerBuyCommand(bot: Bot): void {
     const chatId = String(ctx.chat.id);
 
     if (!connectedWallets.has(chatId)) {
-      await ctx.reply("Kamu belum connect wallet. Ketik /connect <wallet_address> dulu.");
+      await ctx.reply("You haven't connected a wallet yet. Type /connect <wallet_address> first.");
       return;
     }
 
     const cardId = activeCards.get(chatId);
 
     if (!cardId) {
-      await ctx.reply("Belum ada card aktif. Ketik /use <card_id> dulu.");
+      await ctx.reply("No active card. Type /use <card_id> first.");
       return;
     }
 
     if (!query) {
-      await ctx.reply("❌ Gunakan: /buy <nama_item>\nContoh: /buy hoodie basic");
+      await ctx.reply("❌ Use: /buy <item_name>\nExample: /buy ai premium");
       return;
     }
 
-    await ctx.reply("🔍 Mencari...");
+    await ctx.reply("🔍 Searching...");
 
     let products: Product[];
     try {
       products = await getProducts();
     } catch (err) {
-      const message = err instanceof ApiError ? err.message : "Server sedang tidak tersedia. Coba lagi.";
+      const message = err instanceof ApiError ? err.message : "Server unavailable. Please try again.";
       await ctx.reply(`❌ ${message}`);
       return;
     }
 
     const product = findMatch(products, query);
     if (!product) {
-      await ctx.reply(`❌ Produk "${query}" tidak ditemukan.\n\nProduk tersedia:\n${productList(products)}`);
+      await ctx.reply(`❌ Product "${query}" not found.\n\nAvailable products:\n${productList(products)}`);
       return;
     }
 
-    await ctx.reply(`🛒 Ditemukan: *${product.name}*\n💰 Harga: ${product.priceDisplay}\n\nMemproses...`, {
+    await ctx.reply(`🛒 Found: *${product.name}*\n💰 Price: ${product.priceDisplay}\n\nProcessing...`, {
       parse_mode: "Markdown",
     });
 
@@ -68,14 +68,14 @@ export function registerBuyCommand(bot: Bot): void {
       });
 
       if (result.autoApproved) {
-        await ctx.reply(`✅ Pembelian berhasil! Pembayaran diproses otomatis.`);
+        await ctx.reply(`✅ Purchase successful! Payment processed automatically.`);
       } else {
         await ctx.reply(
-          `⏳ Harga melebihi auto-approve limit.\nNotifikasi approval sudah dikirim ke pemilik card.\nMenunggu konfirmasi...`
+          `⏳ Price exceeds auto-approve limit.\nApproval notification sent to the card owner.\nWaiting for confirmation...`
         );
       }
     } catch (err) {
-      const message = err instanceof ApiError ? err.message : "Server sedang tidak tersedia. Coba lagi.";
+      const message = err instanceof ApiError ? err.message : "Server unavailable. Please try again.";
       await ctx.reply(`❌ ${message}`);
     }
   });

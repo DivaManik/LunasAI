@@ -399,6 +399,39 @@
     animation-play-state: paused;
   }
 
+  /* ─── How It Works: step card "menyala" saat masuk viewport ─── */
+  .step-content-glow {
+    animation: stepGlowIn 1.4s ease-out both;
+  }
+  .step-node-glow {
+    box-shadow: 0 0 18px 2px rgba(217, 119, 6, 0.5);
+  }
+
+  /* ─── Navbar: nav item hover underline ─── */
+  .nav-item {
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.2s ease;
+  }
+  .nav-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--amber);
+    border-radius: 1px;
+    transition: width 0.3s ease;
+  }
+  .nav-item:hover {
+    color: var(--amber);
+  }
+  .nav-item:hover::after,
+  .nav-item.active::after {
+    width: 100%;
+  }
+
   /* ─── Landing: expanding feature cards ─── */
   .feature-row {
     display: flex;
@@ -422,18 +455,36 @@
     flex: 2.5;
     border-color: var(--border-amber);
   }
-  .feature-card-bg {
+  .card-image-before,
+  .card-image-hover {
     position: absolute;
     inset: 0;
+  }
+  .card-image-before {
+    opacity: 0.25;
+    filter: grayscale(0.4) brightness(0.7);
+    transition: opacity 0.4s ease;
+  }
+  .card-image-hover {
     opacity: 0;
     transform: scale(1.05);
     transition:
-      opacity 0.4s ease,
-      transform 0.4s ease;
+      opacity 0.4s ease 0.1s,
+      transform 0.4s ease 0.1s;
   }
-  .feature-card:hover .feature-card-bg {
+  .feature-card:hover .card-image-before {
+    opacity: 0;
+  }
+  .feature-card:hover .card-image-hover {
     opacity: 1;
     transform: scale(1);
+  }
+  .feature-card[data-card="3"] .card-image-before,
+  .feature-card[data-card="3"] .card-image-hover {
+    filter: brightness(0.3);
+  }
+  .feature-card[data-card="3"]:hover .card-image-hover {
+    filter: brightness(0.3);
   }
   .feature-card-overlay {
     position: absolute;
@@ -473,8 +524,12 @@
       min-height: 300px;
       cursor: default;
     }
-    .feature-card-bg,
-    .feature-card:hover .feature-card-bg {
+    .card-image-before {
+      opacity: 0;
+    }
+    .card-image-hover,
+    .feature-card:hover .card-image-hover,
+    .feature-card:focus-within .card-image-hover {
       opacity: 0.4;
       transform: none;
     }
@@ -557,6 +612,21 @@
   }
 }
 
+@keyframes stepGlowIn {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+    border-color: var(--border);
+  }
+  40% {
+    box-shadow: 0 0 24px 4px rgba(217, 119, 6, 0.35);
+    border-color: var(--amber);
+  }
+  100% {
+    box-shadow: 0 0 16px 1px rgba(217, 119, 6, 0.18);
+    border-color: var(--border-amber);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fade-up > *,
   .pulse-dot,
@@ -572,9 +642,15 @@
   .btn-primary::after,
   .ticker-track,
   .feature-card,
-  .feature-card-bg,
+  .card-image-before,
+  .card-image-hover,
   .feature-card-overlay,
-  .feature-card-content {
+  .feature-card-content,
+  .step-item,
+  .step-node,
+  .step-content,
+  .step-content-glow,
+  .timeline-progress {
     animation: none !important;
     transition: none !important;
   }

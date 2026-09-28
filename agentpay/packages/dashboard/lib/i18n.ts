@@ -2,6 +2,7 @@ export type Lang = "id" | "en";
 
 export const t = {
   nav: {
+    home: { id: "Beranda", en: "Home" },
     features: { id: "Fitur", en: "Features" },
     howItWorks: { id: "Cara Kerja", en: "How It Works" },
     dashboard: { id: "Dashboard", en: "Dashboard" },
@@ -233,6 +234,8 @@ export const t = {
       },
       copy: { id: "Salin URL", en: "Copy URL" },
       copied: { id: "✓ Tersalin", en: "✓ Copied" },
+      showUrl: { id: "Tampilkan URL", en: "Show URL" },
+      hideUrl: { id: "Sembunyikan URL", en: "Hide URL" },
       regen: { id: "Revoke & Generate Ulang", en: "Revoke & Regenerate" },
       revoke: { id: "Revoke", en: "Revoke" },
       processing: { id: "Memproses...", en: "Processing..." },
@@ -304,6 +307,52 @@ export const t = {
       },
       modalCancel: { id: "Batal", en: "Cancel" },
       modalContinue: { id: "Mengerti, Lanjutkan →", en: "Got it, Continue →" },
+
+      budgetBadge: { id: "Dana yang dikunci", en: "Funds to lock" },
+      budgetDesc: {
+        id: "Jumlah IDRX yang akan dikunci di smart contract sebagai anggaran AI agent kamu. AI tidak bisa membelanjakan lebih dari ini.",
+        en: "The amount of IDRX locked in the smart contract as your AI agent's budget. The AI can't spend more than this.",
+      },
+      availableBalance: { id: "Saldo tersedia:", en: "Available balance:" },
+      budgetExceedsBalance: {
+        id: "Budget melebihi saldo wallet kamu. Kurangi budget atau claim IDRX dari faucet.",
+        en: "Budget exceeds your wallet balance. Lower the budget or claim IDRX from the faucet.",
+      },
+      budgetMax: { id: "Max", en: "Max" },
+      autoLimitBadge: { id: "Per transaksi", en: "Per transaction" },
+      autoLimitDesc: {
+        id: "Transaksi di bawah limit ini disetujui otomatis oleh AI. Di atas limit, kamu mendapat notifikasi untuk approve manual.",
+        en: "Transactions under this limit are auto-approved by the AI. Above it, you'll get a notification for manual approval.",
+      },
+      autoLimitWarning: {
+        id: "Hati-hati: AI bisa membelanjakan seluruh budget sekaligus tanpa konfirmasi.",
+        en: "Careful: the AI can spend the entire budget at once without confirmation.",
+      },
+      expiryBadge: { id: "Kartu expired otomatis", en: "Card expires automatically" },
+      expiryUntil: { id: "Kartu expired pada:", en: "Card expires on:" },
+      rupiahNote: { id: "1 IDRX = 1 IDR", en: "1 IDRX = 1 IDR" },
+      daysSuffix: { id: "hari", en: "days" },
+
+      previewTitle: { id: "Preview Kartu", en: "Card Preview" },
+      previewBudgetLabel: { id: "Total Budget", en: "Total Budget" },
+      previewAutoLimitLabel: { id: "Auto-Approve", en: "Auto-Approve" },
+      previewExpiryLabel: { id: "Berlaku s/d", en: "Valid Until" },
+
+      summaryTitle: { id: "Ringkasan", en: "Summary" },
+      summaryLocked: { id: "Budget dikunci", en: "Budget locked" },
+      summaryAutoApprove: { id: "Auto-approve hingga", en: "Auto-approve up to" },
+      summaryPerTx: { id: "/ transaksi", en: "/ transaction" },
+      summaryManual: { id: "Perlu approval manual", en: "Needs manual approval" },
+      summaryExpired: { id: "Expired", en: "Expires" },
+      summaryGas: { id: "Gas fee (estimasi)", en: "Gas fee (estimate)" },
+
+      stepBudget: { id: "Total Budget", en: "Total Budget" },
+      stepAutoLimit: { id: "Batas Auto-Approve", en: "Auto-Approve Limit" },
+      stepExpiry: { id: "Masa Berlaku", en: "Card Validity" },
+      walletConfirmNote: {
+        id: "Proses membutuhkan 2 konfirmasi wallet: Approve IDRX → Create Card",
+        en: "This process needs 2 wallet confirmations: Approve IDRX → Create Card",
+      },
     },
 
     faucet: {
@@ -375,14 +424,75 @@ export const t = {
     },
 
     mcpPage: {
-      guideTitle: { id: "Cara Menghubungkan ke Claude", en: "How to Connect to Claude" },
-      step1: { id: "Copy URL MCP di sebelah kiri", en: "Copy the MCP URL on the left" },
-      step2: { id: "Buka claude.ai → Settings → Connectors", en: "Open claude.ai → Settings → Connectors" },
-      step3: { id: 'Klik "Add MCP Server"', en: 'Click "Add MCP Server"' },
-      step4: { id: "Paste URL, klik Save", en: "Paste the URL, click Save" },
-      step5: {
-        id: "Mulai chat dengan Claude — tools tersedia otomatis",
-        en: "Start chatting with Claude — tools are available automatically",
+      guideTitle: { id: "Cara Menghubungkan MCP", en: "How to Connect MCP" },
+      urlPlaceholderNote: {
+        id: "Ganti <MCP_URL> dengan URL MCP kartu kamu di sebelah kiri.",
+        en: "Replace <MCP_URL> with your card's MCP URL on the left.",
+      },
+      experimental: { id: "⚠️ Eksperimental", en: "⚠️ Experimental" },
+
+      tabClaude: { id: "Claude", en: "Claude" },
+      tabCursor: { id: "Cursor", en: "Cursor" },
+      tabWindsurf: { id: "Windsurf", en: "Windsurf" },
+      tabVscode: { id: "VS Code", en: "VS Code" },
+
+      claudeStep1: { id: "Buka Claude Desktop", en: "Open Claude Desktop" },
+      claudeStep2: {
+        id: "Pergi ke Settings → Developer → Edit Config",
+        en: "Go to Settings → Developer → Edit Config",
+      },
+      claudeStep3: {
+        id: "Tambahkan ke claude_desktop_config.json:",
+        en: "Add this to claude_desktop_config.json:",
+      },
+      claudeStep4: { id: "Restart Claude Desktop", en: "Restart Claude Desktop" },
+      claudeStep5: {
+        id: "Cek ikon 🔌 di chat — LunasAI tools sudah tersedia",
+        en: "Check the 🔌 icon in chat — LunasAI tools are now available",
+      },
+
+      cursorStep1: { id: "Buka Cursor Settings (Cmd/Ctrl + Shift + J)", en: "Open Cursor Settings (Cmd/Ctrl + Shift + J)" },
+      cursorStep2: { id: 'Pergi ke tab "MCP"', en: 'Go to the "MCP" tab' },
+      cursorStep3: { id: 'Klik "Add new MCP server"', en: 'Click "Add new MCP server"' },
+      cursorStep4: { id: "Isi:", en: "Fill in:" },
+      cursorStep4Name: { id: "Name: LunasAI", en: "Name: LunasAI" },
+      cursorStep4Type: { id: "Type: SSE", en: "Type: SSE" },
+      cursorStep4Url: { id: "URL:", en: "URL:" },
+      cursorStep5: {
+        id: "Klik Save — tools langsung aktif di Cursor Agent",
+        en: "Click Save — tools are instantly active in Cursor Agent",
+      },
+
+      windsurfStep1: { id: "Buka Windsurf Settings", en: "Open Windsurf Settings" },
+      windsurfStep2: { id: "Pergi ke Cascade → MCP Servers", en: "Go to Cascade → MCP Servers" },
+      windsurfStep3: { id: 'Klik "+ Add Server"', en: 'Click "+ Add Server"' },
+      windsurfStep4: { id: "Isi:", en: "Fill in:" },
+      windsurfStep4Name: { id: "Name: LunasAI", en: "Name: LunasAI" },
+      windsurfStep4Url: { id: "Server URL:", en: "Server URL:" },
+      windsurfStep5: { id: "Restart Windsurf", en: "Restart Windsurf" },
+      windsurfStep6: {
+        id: "Tools LunasAI tersedia di Cascade chat",
+        en: "LunasAI tools are available in Cascade chat",
+      },
+
+      vscodeStep1: {
+        id: 'Install extension "GitHub Copilot" versi terbaru',
+        en: 'Install the latest "GitHub Copilot" extension',
+      },
+      vscodeStep2: {
+        id: "Buka Command Palette (Cmd/Ctrl + Shift + P)",
+        en: "Open Command Palette (Cmd/Ctrl + Shift + P)",
+      },
+      vscodeStep3: { id: 'Ketik: "MCP: Add Server"', en: 'Type: "MCP: Add Server"' },
+      vscodeStep4: { id: "Pilih type: SSE", en: "Select type: SSE" },
+      vscodeStep5: { id: "Masukkan URL:", en: "Enter the URL:" },
+      vscodeStep6: {
+        id: 'Buka Copilot Chat → pilih mode "Agent"',
+        en: 'Open Copilot Chat → select "Agent" mode',
+      },
+      vscodeStep7: {
+        id: "Catatan: fitur ini masih eksperimental, mungkin tidak stabil",
+        en: "Note: this feature is still experimental and may be unstable",
       },
     },
 
@@ -393,22 +503,115 @@ export const t = {
         en: "Connect your wallet to the Telegram bot to manage cards via chat.",
       },
       usernameLabel: { id: "Bot Username", en: "Bot Username" },
+      openBotHero: { id: "Buka @LunasPayBot", en: "Open @LunasPayBot" },
       howToTitle: { id: "Cara pakai:", en: "How to use:" },
-      step1: { id: "Buka Telegram, cari @LunasPayBot", en: "Open Telegram, search for @LunasPayBot" },
-      step2: { id: "Ketik /start", en: "Type /start" },
-      step3: {
-        id: "Ketik /connect <wallet_address_kamu>",
-        en: "Type /connect <your_wallet_address>",
+      step1: {
+        id: 'Klik tombol "Buka @LunasPayBot" di atas',
+        en: 'Click "Open @LunasPayBot" above',
       },
-      step4: { id: "Ketik /use <card_id>", en: "Type /use <card_id>" },
-      step5: { id: "Ketik /buy <nama_produk>", en: "Type /buy <product_name>" },
+      step2: { id: 'Klik "Start" di chat Telegram', en: 'Click "Start" in the Telegram chat' },
+      step3: { id: "Ketik /start untuk memulai", en: "Type /start to begin" },
+      step4: {
+        id: "Bot akan meminta MCP URL kamu — copy dari halaman MCP",
+        en: "The bot will ask for your MCP URL — copy it from the MCP page",
+      },
+      step5: {
+        id: "Paste MCP URL ke bot → AI agent siap digunakan via Telegram",
+        en: "Paste your MCP URL to the bot → AI agent ready via Telegram",
+      },
       commandsTitle: { id: "Commands", en: "Commands" },
       cmdStart: { id: "Mulai & lihat panduan", en: "Start & see the guide" },
       cmdConnect: { id: "Hubungkan wallet", en: "Connect wallet" },
       cmdUse: { id: "Pilih kartu aktif", en: "Select active card" },
       cmdBuy: { id: "Beli produk", en: "Buy a product" },
       cmdBalance: { id: "Cek saldo kartu", en: "Check card balance" },
-      openBot: { id: "Buka @LunasPayBot di Telegram →", en: "Open @LunasPayBot on Telegram →" },
+    },
+
+    shop: {
+      breadcrumb: { id: "Toko Digital", en: "Digital Store" },
+      title: { id: "Toko Digital", en: "Digital Store" },
+      x402Enabled: { id: "x402 Enabled", en: "x402 Enabled" },
+      subtitle: {
+        id: "Ekosistem merchant yang menerima pembayaran otomatis dari AI agent via protokol x402.",
+        en: "The merchant ecosystem accepting automatic payments from AI agents via the x402 protocol.",
+      },
+      digiStoreLabel: { id: "DigiStore", en: "DigiStore" },
+      live: { id: "Live", en: "Live" },
+      digiStoreHeroTitle: {
+        id: "Toko digital LunasAI yang sudah aktif",
+        en: "LunasAI's digital store, already live",
+      },
+      digiStoreHeroDesc: {
+        id: "5 produk digital yang bisa dibeli langsung oleh AI agent via {code} — tanpa approval manual, on-chain dengan IDRX.",
+        en: "5 digital products AI agents can buy directly via {code} — no manual approval, on-chain with IDRX.",
+      },
+      tagProducts: { id: "5 Produk", en: "5 Products" },
+      tagHttp402: { id: "HTTP 402", en: "HTTP 402" },
+      tagErc20: { id: "ERC-20 IDRX", en: "ERC-20 IDRX" },
+      tagInstant: { id: "Instan", en: "Instant" },
+      openDigiStore: { id: "Buka DigiStore", en: "Open DigiStore" },
+      viewAllProducts: { id: "Lihat semua produk", en: "View all products" },
+      merchantPartner: { id: "Merchant Partner", en: "Merchant Partners" },
+      comingSoon: { id: "Coming Soon", en: "Coming Soon" },
+      soon: { id: "Segera", en: "Soon" },
+      willSupport: { id: "Akan mendukung x402 + IDRX", en: "Will support x402 + IDRX" },
+      registerTitle: { id: "Daftarkan Merchant Kamu", en: "Register Your Merchant" },
+      registerDesc: {
+        id: "Terima pembayaran otomatis dari AI agent via protokol x402. Tidak perlu integrasi rumit — cukup tambahkan endpoint ke website kamu dan mulai terima IDRX.",
+        en: "Accept automatic payments from AI agents via the x402 protocol. No complex integration needed — just add an endpoint to your website and start receiving IDRX.",
+      },
+      formMerchantName: { id: "Nama Merchant *", en: "Merchant Name *" },
+      formMerchantPlaceholder: { id: "Tokoku Store", en: "My Store" },
+      formUrl: { id: "URL Website", en: "Website URL" },
+      formUrlPlaceholder: { id: "https://tokoku.id", en: "https://mystore.com" },
+      formCategory: { id: "Kategori", en: "Category" },
+      formCategoryPlaceholder: { id: "Pilih kategori", en: "Select category" },
+      catEcommerce: { id: "E-Commerce", en: "E-Commerce" },
+      catEducation: { id: "Edukasi", en: "Education" },
+      catMedia: { id: "Media & Konten", en: "Media & Content" },
+      catSoftware: { id: "Software & SaaS", en: "Software & SaaS" },
+      catOther: { id: "Lainnya", en: "Other" },
+      formEmail: { id: "Email Kontak *", en: "Contact Email *" },
+      formEmailPlaceholder: { id: "kamu@merchant.id", en: "you@merchant.com" },
+      formSubmit: { id: "Daftar Sekarang", en: "Register Now" },
+      formSuccessTitle: { id: "Pendaftaran diterima!", en: "Registration received!" },
+      formSuccessDesc: {
+        id: "Tim kami akan menghubungi kamu di {email} untuk proses integrasi x402.",
+        en: "Our team will reach out to you at {email} for the x402 integration process.",
+      },
+      formRegisterAnother: { id: "Daftarkan merchant lain", en: "Register another merchant" },
+
+      productAiPremium: { id: "Akses AI Premium", en: "AI Premium Access" },
+      productEbook: { id: "E-Book Web3 Indonesia", en: "Web3 Indonesia E-Book" },
+      productNewsletter: { id: "Newsletter Pro", en: "Newsletter Pro" },
+      productCourse: { id: "Kursus Blockchain Developer", en: "Blockchain Developer Course" },
+      productLicense: { id: "Software License", en: "Software License" },
+      catSubscription: { id: "Langganan", en: "Subscription" },
+      catEbook: { id: "E-Book", en: "E-Book" },
+      catContent: { id: "Konten", en: "Content" },
+      catCourse: { id: "Kursus", en: "Course" },
+      catLicense: { id: "Lisensi", en: "License" },
+
+      merchantNusaCartDesc: {
+        id: "Platform belanja digital Indonesia — voucher, top-up, dan hadiah via AI agent.",
+        en: "Indonesian digital shopping platform — vouchers, top-ups, and gifts via AI agent.",
+      },
+      merchantZipRideDesc: {
+        id: "Pesan ojek, makanan, dan kurir otomatis lewat AI agent tanpa buka app.",
+        en: "Order rides, food, and courier services automatically via AI agent, no app needed.",
+      },
+      merchantPageOneDesc: {
+        id: "E-book, audiobook, dan majalah digital premium — langsung ke AI agent kamu.",
+        en: "Premium e-books, audiobooks, and digital magazines — delivered straight to your AI agent.",
+      },
+      merchantSkillLoopDesc: {
+        id: "Ribuan kursus online, sertifikasi, dan workshop — dibeli AI agent sesuai kebutuhan.",
+        en: "Thousands of online courses, certifications, and workshops — purchased by AI agent on demand.",
+      },
+      merchantCatEcommerce: { id: "E-Commerce", en: "E-Commerce" },
+      merchantCatSuperApp: { id: "Super App", en: "Super App" },
+      merchantCatMediaBooks: { id: "Media & Buku", en: "Media & Books" },
+      merchantCatEducation: { id: "Edukasi", en: "Education" },
     },
 
     telegramVerify: {
