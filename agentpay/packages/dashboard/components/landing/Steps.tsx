@@ -6,6 +6,13 @@ import { Reveal } from "../Reveal";
 
 const STEP_ICONS: LucideIcon[] = [Wallet, CreditCard, Bot, CheckCircle];
 
+const STEP_VISUALS = [
+  "/images/step-wallet-3d.png",
+  "/images/step-delegation-card-3d.png",
+  "/images/step-mcp-connection-3d.png",
+  "/images/step-x402-handoff-3d.png",
+];
+
 export function Steps({
   lang,
   bgRef,
@@ -79,7 +86,7 @@ export function Steps({
                 ref={(el) => {
                   stepRefs.current[i] = el;
                 }}
-                className={`step-item relative mb-12 flex items-center gap-6 pl-16 transition-all duration-1000 ease-in-out last:mb-0 md:gap-8 md:pl-0 ${
+                className={`step-item group/step relative mb-12 flex items-center gap-6 pl-16 transition-all duration-1000 ease-in-out last:mb-0 md:gap-8 md:pl-0 ${
                   isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
                 } ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
               >
@@ -94,15 +101,26 @@ export function Steps({
                 </div>
 
                 <div
-                  className={`step-content flex-1 rounded-xl border bg-[rgba(18,17,24,0.8)] p-6 backdrop-blur-sm transition-all duration-1000 ease-in-out ${
+                  className={`step-content flex-1 overflow-hidden rounded-xl border bg-[rgba(18,17,24,0.8)] p-6 backdrop-blur-sm transition-all duration-1000 ease-in-out ${
                     isVisible ? "step-content-glow border-line-amber" : "border-line"
                   }`}
                 >
-                  <span className="mono text-sm font-semibold text-brand">Step {i + 1}</span>
-                  <h3 className="mt-1 mb-2 font-display text-lg font-semibold">
-                    {step.title[lang]}
-                  </h3>
-                  <p className="text-sm leading-[1.65] text-muted">{step.desc[lang]}</p>
+                  <div className="flex items-center gap-4 sm:gap-6">
+                    <div className="min-w-0 flex-1">
+                      <span className="mono text-sm font-semibold text-brand">Step {i + 1}</span>
+                      <h3 className="mt-1 mb-2 font-display text-lg font-semibold">
+                        {step.title[lang]}
+                      </h3>
+                      <p className="text-sm leading-[1.65] text-muted">{step.desc[lang]}</p>
+                    </div>
+                    <Image
+                      src={STEP_VISUALS[i]}
+                      alt=""
+                      width={96}
+                      height={96}
+                      className="h-20 w-20 shrink-0 object-contain transition-transform duration-500 group-hover/step:scale-105 sm:h-24 sm:w-24"
+                    />
+                  </div>
                 </div>
               </div>
             );

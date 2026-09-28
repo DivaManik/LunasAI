@@ -1,26 +1,26 @@
 import Image from "next/image";
-import { CreditCard, Link2, Zap } from "lucide-react";
 import { t, type Lang } from "@/lib/i18n";
 import { Reveal } from "../Reveal";
-
-const AMBER = "#d97706";
 
 const CARD_VISUALS = [
   {
     before: "/images/card1-before.jpg",
     hover: "/images/card1-hover.jpg",
-    icon: <CreditCard size={20} color={AMBER} />,
   },
   {
     before: "/images/card2-before.jpg",
     hover: "/images/card2-hover.jpg",
-    icon: <Zap size={20} color={AMBER} />,
   },
   {
     before: "/images/card3-before.jpg",
     hover: "/images/card3-hover.jpg",
-    icon: <Link2 size={20} color={AMBER} />,
   },
+];
+
+const FEATURE_ICONS = [
+  "/images/feature-delegation-icon-3d.png",
+  "/images/feature-agent-icon-3d.png",
+  "/images/feature-x402-icon-3d.png",
 ];
 
 export function FeatureCards({ lang }: { lang: Lang }) {
@@ -55,8 +55,14 @@ export function FeatureCards({ lang }: { lang: Lang }) {
               <div className="feature-card-overlay" />
 
               <div className="absolute top-8 left-8 flex items-center gap-3">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-[rgba(217,119,6,0.2)] bg-[rgba(217,119,6,0.1)] text-xl backdrop-blur-sm">
-                  {CARD_VISUALS[i].icon}
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-[rgba(217,119,6,0.2)] bg-[rgba(217,119,6,0.1)] backdrop-blur-sm">
+                  <Image
+                    src={FEATURE_ICONS[i]}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 object-contain"
+                  />
                 </span>
                 <span className="num font-display text-sm font-bold text-dim">0{i + 1}</span>
               </div>
