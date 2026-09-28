@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { BACKEND_URL, formatIdrx } from "@/lib/constants";
+import { t, type Lang } from "@/lib/i18n";
+import { useLangContext } from "./LangProvider";
 
 type SpendRecord = {
   id: string;
@@ -18,7 +20,17 @@ const STATUS_DOT: Record<string, string> = {
   rejected: "bg-ember",
 };
 
+function statusLabel(status: string, lang: Lang): string {
+  const a = t.dashboard.activity;
+  if (status === "auto_approved") return a.autoApproved[lang];
+  if (status === "approved") return a.approved[lang];
+  if (status === "pending") return a.pending[lang];
+  if (status === "rejected") return a.rejected[lang];
+  return status;
+}
+
 export function SpendHistory({ cardId }: { cardId: bigint }) {
+  const { lang } = useLangContext();
   const [history, setHistory] = useState<SpendRecord[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +44,7 @@ export function SpendHistory({ cardId }: { cardId: bigint }) {
         const data = await res.json();
         if (!cancelled) setHistory(Array.isArray(data) ? data : []);
       } catch {
-        if (!cancelled) setError("Gagal memuat riwayat transaksi");
+        if (!cancelled) setError(t.dashboard.activity.loadError[lang]);
       }
     }
 
@@ -40,18 +52,18 @@ export function SpendHistory({ cardId }: { cardId: bigint }) {
     return () => {
       cancelled = true;
     };
-  }, [cardId]);
+  }, [cardId, lang]);
 
   if (error) {
     return <p className="text-sm text-ember">{error}</p>;
   }
 
   if (history === null) {
-    return <p className="text-sm text-muted">Memuat riwayat...</p>;
+    return <p className="text-sm text-muted">{t.dashboard.activity.loadingHistory[lang]}</p>;
   }
 
   if (history.length === 0) {
-    return <p className="text-sm text-muted">Belum ada transaksi.</p>;
+    return <p className="text-sm text-muted">{t.dashboard.activity.noneYet[lang]}</p>;
   }
 
   return (
@@ -64,11 +76,10 @@ export function SpendHistory({ cardId }: { cardId: bigint }) {
             return null;
           }
         })();
-        const date = new Date(record.createdAt).toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        });
+        const date = new Date(record.createdAt).toLocaleDateString(
+          lang === "id" ? "id-ID" : "en-US",
+          { day: "numeric", month: "long", year: "numeric" }
+        );
 
         return (
           <li
@@ -80,10 +91,10 @@ export function SpendHistory({ cardId }: { cardId: bigint }) {
             />
             <div className="min-w-0 flex-1">
               <div className="truncate text-[13px] font-medium">
-                {record.description || "Transaksi"}
+                {record.description || t.dashboard.activity.transaction[lang]}
               </div>
               <div className="text-xs text-muted">
-                {record.status} · {date}
+                {statusLabel(record.status, lang)} · {date}
               </div>
             </div>
             <span className="num shrink-0 font-display text-[13px] font-semibold text-brand">

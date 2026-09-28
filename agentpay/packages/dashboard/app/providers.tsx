@@ -6,6 +6,7 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import { useState, type ReactNode } from "react";
 import { config } from "@/lib/wagmi";
 import { privyConfig } from "@/lib/privy";
+import { LangProvider } from "@/components/LangProvider";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -16,7 +17,9 @@ export function Providers({ children }: { children: ReactNode }) {
       config={privyConfig}
     >
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={config}>{children}</WagmiProvider>
+        <WagmiProvider config={config}>
+          <LangProvider>{children}</LangProvider>
+        </WagmiProvider>
       </QueryClientProvider>
     </PrivyProvider>
   );

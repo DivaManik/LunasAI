@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { useWallets } from "@privy-io/react-auth";
 import { BACKEND_URL } from "@/lib/constants";
+import { t } from "@/lib/i18n";
+import { useLangContext } from "./LangProvider";
 
 export function FaucetButton() {
   const { wallets } = useWallets();
+  const { lang } = useLangContext();
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error" | "cooldown"
   >("idle");
@@ -29,17 +32,17 @@ export function FaucetButton() {
 
       if (res.status === 429) {
         setStatus("cooldown");
-        setMessage(data.error ?? "Sudah claim hari ini.");
+        setMessage(data.error ?? t.dashboard.faucet.cooldownMsg[lang]);
         return;
       }
       if (!res.ok) {
         setStatus("error");
-        setMessage(data.error ?? "Faucet gagal.");
+        setMessage(data.error ?? t.dashboard.faucet.failedMsg[lang]);
         return;
       }
 
       setStatus("success");
-      setMessage(`${data.amount} berhasil dikirim!`);
+      setMessage(`${data.amount} ${t.dashboard.faucet.sentSuffix[lang]}`);
       // Reset ke idle setelah 5 detik
       setTimeout(() => {
         setStatus("idle");
@@ -47,7 +50,7 @@ export function FaucetButton() {
       }, 5000);
     } catch {
       setStatus("error");
-      setMessage("Tidak bisa terhubung ke server.");
+      setMessage(t.dashboard.faucet.connError[lang]);
     }
   };
 
@@ -64,11 +67,11 @@ export function FaucetButton() {
           ${status === "error" ? "btn-ghost !px-4 !text-[13px] !border-[rgba(234,88,12,0.3)] !text-ember" : ""}
         `}
       >
-        {status === "idle" && "🪙 Claim 100.000 IDRX"}
-        {status === "loading" && "Mengirim..."}
-        {status === "success" && "✓ IDRX Diterima!"}
-        {status === "cooldown" && "⏳ Sudah Claim Hari Ini"}
-        {status === "error" && "Coba Lagi"}
+        {status === "idle" && `🪙 ${t.dashboard.faucet.btn[lang]}`}
+        {status === "loading" && t.dashboard.faucet.loading[lang]}
+        {status === "success" && t.dashboard.faucet.success[lang]}
+        {status === "cooldown" && t.dashboard.faucet.cooldown[lang]}
+        {status === "error" && t.dashboard.faucet.error[lang]}
       </button>
       {message && (
         <p

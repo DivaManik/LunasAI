@@ -1,0 +1,9 @@
+Fonts used in this design:
+
+Font: Baskervville
+Author: ANRT
+Url: https://fonts.google.com/specimen/Baskervville
+
+Font: Gemunu Libre
+Author: Mooniak
+Url: https://fonts.google.com/specimen/Gemunu+Libre

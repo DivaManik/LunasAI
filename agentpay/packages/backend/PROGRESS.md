@@ -1,7 +1,13 @@
 # Backend Team — Progress Notes
 
-**Update:** 2026-09-27 (V3: migrasi DelegationCardV2 / ERC-20 IDRX + tool paid_fetch)
+**Update:** 2026-09-28 (Faucet endpoint: claim IDRX testnet gratis)
 **Scope:** `packages/backend/src/` — V1 scope per `docs/agents/02-backend-team.md`, V2 scope per `docs/agents/07-mcp-team.md`
+
+## Faucet endpoint (2026-09-28)
+
+`POST /api/faucet` (baru, `src/routes/faucet.ts`) — user kirim `{address}`, backend mint 100.000 IDRX ke wallet itu via `mintIDRX()` (baru di `contract.ts`, deployer wallet adalah owner MockIDRX). Rate limit 24 jam per-address (`canClaim`/`recordClaim`, in-memory Map baru di `db.ts`). Test end-to-end: mint on-chain nyata terverifikasi lewat `balanceOf` (naik tepat 100.000 IDRX), rate limit 429 di klaim kedua, invalid address 400, wallet berbeda tidak saling terpengaruh rate limit. Detail: `docs/agents/reports/09-backend-team-report-faucet.md`.
+
+---
 
 ## V3 — Migrasi ke DelegationCardV2 (ERC-20 IDRX) + tool `paid_fetch` (2026-09-27)
 

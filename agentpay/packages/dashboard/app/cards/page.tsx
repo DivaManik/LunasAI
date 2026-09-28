@@ -1,5 +1,5 @@
-import { Dashboard } from "@/components/Dashboard";
+import { redirect } from "next/navigation";
 
-export default function CardsPage() {
-  return <Dashboard />;
+export default function OldCardsPage() {
+  redirect("/dashboard/cards");
 }

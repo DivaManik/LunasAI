@@ -173,3 +173,33 @@ export function timeAgo(timestamp: number): string {
 export function isToday(timestamp: number): boolean {
   return new Date(timestamp).toDateString() === new Date().toDateString();
 }
+
+export function last7DaysSpending(
+  records: ActivityRecord[] | null
+): { date: string; amount: number }[] {
+  const days: { date: string; key: string; amount: number }[] = [];
+  const now = new Date();
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    days.push({
+      date: d.toLocaleDateString("id-ID", { day: "numeric", month: "short" }),
+      key: d.toDateString(),
+      amount: 0,
+    });
+  }
+
+  if (records) {
+    for (const r of records) {
+      const key = new Date(r.createdAt).toDateString();
+      const day = days.find((d) => d.key === key);
+      if (day) {
+        const amount = Number(BigInt(r.amount || "0")) / 100;
+        day.amount += amount;
+      }
+    }
+  }
+
+  return days.map(({ date, amount }) => ({ date, amount }));
+}

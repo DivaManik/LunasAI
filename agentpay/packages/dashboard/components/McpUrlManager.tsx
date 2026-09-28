@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "@/lib/constants";
+import { t } from "@/lib/i18n";
+import { useLangContext } from "./LangProvider";
 
 function storageKey(cardId: string | number): string {
   return `mcp-url-${cardId}`;
@@ -16,6 +18,7 @@ function readStoredUrl(cardId: string | number): string | null {
 }
 
 export function McpUrlManager({ cardId }: { cardId: string | number }) {
+  const { lang } = useLangContext();
   const [url, setUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isRevoking, setIsRevoking] = useState(false);
@@ -44,7 +47,7 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
       }
       setUrl(mcpUrl);
     } catch {
-      setError("Gagal generate MCP URL. Coba lagi.");
+      setError(t.dashboard.mcp.errGenerate[lang]);
     } finally {
       setIsGenerating(false);
     }
@@ -64,7 +67,7 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
       }
       setUrl(null);
     } catch {
-      setError("Gagal revoke MCP URL. Coba lagi.");
+      setError(t.dashboard.mcp.errRevoke[lang]);
     } finally {
       setIsRevoking(false);
     }
@@ -85,11 +88,9 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
           disabled={isGenerating}
           className="btn-small btn-small-amber self-start"
         >
-          {isGenerating ? "Generating..." : "Generate MCP URL"}
+          {isGenerating ? t.dashboard.mcp.generating[lang] : t.dashboard.mcp.btnGenerate[lang]}
         </button>
-        <p className="text-xs text-muted">
-          Setelah generate, paste URL ke: Claude Web → Settings → Connectors → Add MCP Server
-        </p>
+        <p className="text-xs text-muted">{t.dashboard.mcp.hint[lang]}</p>
         {error && <p className="text-xs text-ember">{error}</p>}
       </div>
     );
@@ -97,10 +98,8 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-[13px] font-semibold text-gold">🔑 MCP URL — Rahasia, jangan bagikan!</p>
-      <p className="text-xs text-ember">
-        Simpan URL ini sekarang! Tidak bisa dilihat lagi setelah refresh.
-      </p>
+      <p className="text-[13px] font-semibold text-gold">{t.dashboard.mcp.secretTitle[lang]}</p>
+      <p className="text-xs text-ember">{t.dashboard.mcp.secretWarning[lang]}</p>
 
       <input
         type="text"
@@ -112,19 +111,19 @@ export function McpUrlManager({ cardId }: { cardId: string | number }) {
 
       <div className="flex flex-wrap gap-2">
         <button onClick={handleCopyUrl} className="btn-small btn-small-amber">
-          {urlCopied ? "✓ Tersalin" : "Salin URL"}
+          {urlCopied ? t.dashboard.mcp.copied[lang] : t.dashboard.mcp.copy[lang]}
         </button>
         <button onClick={handleRevoke} disabled={isRevoking} className="btn-small">
-          {isRevoking ? "Memproses..." : "Revoke & Generate Ulang"}
+          {isRevoking ? t.dashboard.mcp.processing[lang] : t.dashboard.mcp.regen[lang]}
         </button>
       </div>
 
       <div className="mt-1 text-xs text-muted">
-        <p className="font-medium text-ink">Cara pakai:</p>
+        <p className="font-medium text-ink">{t.dashboard.mcp.howToTitle[lang]}</p>
         <ol className="list-inside list-decimal">
-          <li>Buka claude.ai → Settings → Connectors → Add MCP Server</li>
-          <li>Paste URL di atas</li>
-          <li>Tanya Claude: &quot;cek info card saya&quot;</li>
+          <li>{t.dashboard.mcp.how1[lang]}</li>
+          <li>{t.dashboard.mcp.how2[lang]}</li>
+          <li>{t.dashboard.mcp.how3[lang]}</li>
         </ol>
       </div>
 

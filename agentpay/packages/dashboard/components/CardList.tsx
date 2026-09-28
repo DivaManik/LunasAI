@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createPublicClient, createWalletClient, custom, http } from "viem";
 import { delegationCardAbi } from "@/lib/abi";
 import { bnbTestnet } from "@/lib/chain";
 import { DELEGATION_CARD_ADDRESS, timestampToDate } from "@/lib/constants";
-import { SpendHistory } from "./SpendHistory";
+import { t, type Lang } from "@/lib/i18n";
+import { useLangContext } from "./LangProvider";
 import { SkeletonRow } from "./Skeleton";
 
 function idrxAmount(raw: bigint): string {
@@ -36,11 +38,12 @@ function getStatus(isActive: boolean, expiryTimestamp: bigint): CardStatus {
   return "active";
 }
 
-const STATUS_CHIP: Record<CardStatus, { label: string; className: string }> = {
-  active: { label: "Aktif", className: "chip-active" },
-  expired: { label: "Expired", className: "chip-expired" },
-  revoked: { label: "Revoked", className: "chip-revoked" },
-};
+function statusChip(status: CardStatus, lang: Lang): { label: string; className: string } {
+  const c = t.dashboard.cardList;
+  if (status === "active") return { label: c.active[lang], className: "chip-active" };
+  if (status === "expired") return { label: c.expired[lang], className: "chip-expired" };
+  return { label: c.revoked[lang], className: "chip-revoked" };
+}
 
 const emptyStateClass = "panel px-6 py-5 text-center text-sm text-muted";
 
@@ -51,11 +54,11 @@ function useActiveWallet() {
   return embeddedWallet ?? externalWallet;
 }
 
-function CardItem({ cardId }: { cardId: bigint }) {
+function CardItem({ cardId, lang }: { cardId: bigint; lang: Lang }) {
   const wallet = useActiveWallet();
-  const [showHistory, setShowHistory] = useState(false);
   const [card, setCard] = useState<CardData | null>(null);
   const [isRevoking, setIsRevoking] = useState(false);
+  const c = t.dashboard.cardList;
 
   async function loadCard() {
     const data = (await publicClient.readContract({
@@ -108,7 +111,7 @@ function CardItem({ cardId }: { cardId: bigint }) {
     }
   }
 
-  const chip = STATUS_CHIP[status];
+  const chip = statusChip(status, lang);
 
   return (
     <div className="panel agent-card flex flex-col gap-4 px-5 py-5 sm:px-6">
@@ -118,16 +121,20 @@ function CardItem({ cardId }: { cardId: bigint }) {
         </div>
 
         <div className="min-w-0 flex-1">
-          <div className="mb-[3px] text-sm font-semibold">Kartu #{cardId.toString()}</div>
+          <div className="mb-[3px] text-sm font-semibold">
+            {c.card[lang]} #{cardId.toString()}
+          </div>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
             <span className={`chip ${chip.className}`}>
               <span className="chip-dot" />
               {chip.label}
             </span>
-            <span className="num">Auto ≤ {idrxAmount(autoApproveLimit)} IDRX</span>
+            <span className="num">
+              {c.autoLimit[lang]} {idrxAmount(autoApproveLimit)} IDRX
+            </span>
           </div>
           <div className="mono mt-1 truncate text-[11px] text-dim" title={authorizedAgent}>
-            Agent {authorizedAgent.slice(0, 6)}...{authorizedAgent.slice(-4)}
+            {c.agent[lang]} {authorizedAgent.slice(0, 6)}...{authorizedAgent.slice(-4)}
           </div>
         </div>
 
@@ -136,7 +143,7 @@ function CardItem({ cardId }: { cardId: bigint }) {
             {idrxAmount(totalBudget)}
           </div>
           <div className="num mt-0.5 text-xs text-muted">
-            {idrxAmount(spentAmount)} terpakai
+            {idrxAmount(spentAmount)} {c.spent[lang]}
           </div>
           <div className="mt-2 ml-auto h-[3px] w-20 overflow-hidden rounded-full bg-line">
             <div
@@ -149,33 +156,34 @@ function CardItem({ cardId }: { cardId: bigint }) {
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
         <span className="num text-xs text-muted">
-          Sisa {idrxAmount(remaining)} IDRX · s/d {timestampToDate(expiryTimestamp)}
+          {c.remaining[lang]} {idrxAmount(remaining)} IDRX · {c.until[lang]}{" "}
+          {timestampToDate(expiryTimestamp)}
         </span>
         <div className="flex gap-2">
-          <button onClick={() => setShowHistory((v) => !v)} className="btn-small">
-            {showHistory ? "Tutup History" : "Lihat History"}
-          </button>
+          <Link href={`/dashboard/history?cardId=${cardId.toString()}`} className="btn-small">
+            {c.btnHistory[lang]}
+          </Link>
           {status === "active" && (
             <button
               onClick={handleRevoke}
               disabled={isRevoking || !wallet}
               className="btn-small btn-small-danger"
             >
-              {isRevoking ? "Memproses..." : "Revoke"}
+              {isRevoking ? c.revoking[lang] : c.btnRevoke[lang]}
             </button>
           )}
         </div>
       </div>
-
-      {showHistory && <SpendHistory cardId={cardId} />}
     </div>
   );
 }
 
 export function CardList() {
   const { authenticated } = usePrivy();
+  const { lang } = useLangContext();
   const wallet = useActiveWallet();
   const address = wallet?.address as `0x${string}` | undefined;
+  const c = t.dashboard.cardList;
 
   const [cardIds, setCardIds] = useState<readonly bigint[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -209,11 +217,11 @@ export function CardList() {
   }, [authenticated, address]);
 
   if (!authenticated) {
-    return <div className={emptyStateClass}>Login dulu untuk lihat kartu kamu</div>;
+    return <div className={emptyStateClass}>{c.loginFirst[lang]}</div>;
   }
 
   if (!address) {
-    return <div className={emptyStateClass}>Wallet belum terdeteksi. Coba login ulang.</div>;
+    return <div className={emptyStateClass}>{c.walletNotFound[lang]}</div>;
   }
 
   if (isLoading) {
@@ -226,17 +234,13 @@ export function CardList() {
   }
 
   if (!cardIds || cardIds.length === 0) {
-    return (
-      <div className={emptyStateClass}>
-        Belum ada kartu. Klik &quot;+ Buat Kartu&quot; di atas untuk membuat kartu pertama.
-      </div>
-    );
+    return <div className={emptyStateClass}>{c.empty[lang]}</div>;
   }
 
   return (
     <div className="flex flex-col gap-3">
       {cardIds.map((id) => (
-        <CardItem key={id.toString()} cardId={id} />
+        <CardItem key={id.toString()} cardId={id} lang={lang} />
       ))}
     </div>
   );

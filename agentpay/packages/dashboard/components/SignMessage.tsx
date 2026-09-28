@@ -5,10 +5,14 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createWalletClient, custom } from "viem";
 import { bnbTestnet } from "@/lib/chain";
 import { BOT_TELEGRAM_URL, BOT_USERNAME } from "@/lib/constants";
+import { t } from "@/lib/i18n";
+import { useLangContext } from "./LangProvider";
 
 export function SignMessage() {
   const { authenticated } = usePrivy();
   const { wallets } = useWallets();
+  const { lang } = useLangContext();
+  const tv = t.dashboard.telegramVerify;
   const [message, setMessage] = useState("");
   const [signature, setSignature] = useState("");
   const [isPending, setIsPending] = useState(false);
@@ -37,10 +41,15 @@ export function SignMessage() {
 
   if (!authenticated) return null;
 
+  const [beforeCmd, afterCmd] = tv.instructions[lang].split("{connectCmd}");
+  const [, afterBot] = afterCmd.split("{bot}");
+
   return (
     <div className="panel flex flex-col gap-4 px-6 py-5">
       <p className="text-sm text-muted">
-        Ketik <code className="text-brand">/connect &lt;address&gt;</code> di{" "}
+        {beforeCmd}
+        <code className="text-brand">/connect &lt;address&gt;</code>
+        {afterCmd.split("{bot}")[0]}
         <a
           href={BOT_TELEGRAM_URL}
           target="_blank"
@@ -49,11 +58,11 @@ export function SignMessage() {
         >
           {BOT_USERNAME}
         </a>
-        , paste pesan dari bot di bawah, lalu sign dengan wallet kamu.
+        {afterBot}
       </p>
 
       <label className="label">
-        Pesan dari bot (contoh: AGENTPAY-VERIFY-abc123...)
+        {tv.messageLabel[lang]}
         <input
           type="text"
           value={message}
@@ -68,13 +77,13 @@ export function SignMessage() {
         disabled={!message || isPending}
         className="btn-primary self-start"
       >
-        {isPending ? "Menunggu konfirmasi wallet..." : "Sign Message"}
+        {isPending ? tv.btnPending[lang] : tv.btnSign[lang]}
       </button>
 
       {signature && (
         <div className="flex flex-col gap-2 border-t border-line pt-4">
-          <p className="text-sm font-medium text-[#4ade80]">✓ Signature berhasil!</p>
-          <p className="text-xs text-muted">Copy dan kirim ke bot dengan /verify:</p>
+          <p className="text-sm font-medium text-[#4ade80]">{tv.success[lang]}</p>
+          <p className="text-xs text-muted">{tv.copyHint[lang]}</p>
           <div className="mono rounded-lg border border-[rgba(217,119,6,0.12)] bg-[rgba(217,119,6,0.06)] p-3 text-xs break-all text-brand">
             {signature}
           </div>
@@ -82,10 +91,10 @@ export function SignMessage() {
             onClick={() => navigator.clipboard.writeText(signature)}
             className="btn-small btn-small-amber self-start"
           >
-            Copy Signature
+            {tv.btnCopy[lang]}
           </button>
           <p className="mt-2 text-xs text-muted">
-            Lalu kirim ke{" "}
+            {tv.sendTo[lang]}{" "}
             <a
               href={BOT_TELEGRAM_URL}
               target="_blank"

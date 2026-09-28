@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Providers>
           <div className="grid-overlay" aria-hidden="true" />
           <Navbar />
-          <div className="relative z-[1] pt-16">{children}</div>
+          <div className="pt-16">{children}</div>
         </Providers>
       </body>
     </html>
