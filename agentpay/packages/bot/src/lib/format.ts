@@ -1,5 +1,6 @@
-export function weiToDisplay(wei: string): string {
-  return (Number(BigInt(wei)) / 1e18).toFixed(4) + " tBNB";
+export function weiToDisplay(raw: string | bigint): string {
+  const value = Number(raw) / 100;
+  return `${value.toLocaleString("id-ID")} IDRX`;
 }
 
 export function formatDate(timestampSeconds: string): string {
