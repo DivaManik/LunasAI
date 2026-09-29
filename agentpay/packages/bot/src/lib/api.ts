@@ -17,7 +17,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  priceWei: string;
+  priceIdrx: string;
   priceDisplay: string;
 }
 

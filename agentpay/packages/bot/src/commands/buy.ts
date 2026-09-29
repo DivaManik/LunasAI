@@ -61,7 +61,7 @@ export function registerBuyCommand(bot: Bot): void {
       const result = await createSpend({
         cardId,
         merchantAddress: SHOP_WALLET_ADDRESS,
-        amount: product.priceWei,
+        amount: product.priceIdrx,
         description: product.name,
         productName: product.name,
         chatId: ctx.chat!.id.toString(),

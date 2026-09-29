@@ -9,7 +9,8 @@ I can shop on your behalf using your on-chain Delegation Card.
 2. /connect <wallet_address>: start wallet verification
 3. /verify <signature>: complete verification (from dashboard)
 4. /use <card_id>: set active card
-5. /buy <item_name>: start shopping!
+5. /products: view available items
+6. /buy <item_name>: start shopping!
 
 💡 Example:
 /connect 0x1234...abcd
